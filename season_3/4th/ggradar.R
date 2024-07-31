@@ -71,3 +71,7 @@ mtcars |>
 msleep$name |> 
   #data.frame() |> 
   as_tibble(rownames = "name") |> slice(61:83) |> print(n = Inf)
+
+
+
+ssh-keygen -t rsa -b 4096 -C "slatopr@gmail.com"
