@@ -74,4 +74,4 @@ msleep$name |>
 
 
 
-ssh-keygen -t rsa -b 4096 -C "slatopr@gmail.com"
+# ssh-keygen -t rsa -b 4096 -C "slatopr@gmail.com"

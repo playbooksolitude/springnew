@@ -1,13 +1,11 @@
 #24-0731 wedn 14:50
 
 #
+library(tidyverse)
 diamonds |> 
   ggplot(aes(x = x, y = y)) +
   geom_path()
 
-diamonds |> 
-  ggplot(aes(x = x, y = y)) +
-  geom_qq()
 
 #
 mpg |> 
