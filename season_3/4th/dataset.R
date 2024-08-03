@@ -175,5 +175,5 @@ msleep |> view()
 # world_bank_pop                Population data from the World Bank
 
 
-Use ‘data(package = .packages(all.available = TRUE))’
-to list the data sets in all *available* packages.
+# Use ‘data(package = .packages(all.available = TRUE))’
+# to list the data sets in all *available* packages.
