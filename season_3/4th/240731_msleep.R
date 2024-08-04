@@ -3,6 +3,12 @@
 #
 library(tidyverse)
 
+#
+msleep |> 
+  colnames() |> 
+  tibble()
+
+
 ?msleep
 # name: 동물의 이름
 # genus: 속(genus) 명칭
