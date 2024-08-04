@@ -1,12 +1,13 @@
-##
+## 24-0804 sun 11:21
 
-?LifeCycleSavings
-eurodist
+#
+data()
 
-msleep |> view()
-?msleep
-?data()
+# all that dataset available
+data(package = .packages(all.available = TRUE))
 
+library(fivethirtyeight)
+fivethirtyeight::avengers
 
 #
 # AirPassengers                 Monthly Airline Passenger Numbers 1949-1960
