@@ -4,7 +4,12 @@
 library(dplyr)
 data()
 
+band_members
+band_instruments
+band_instruments2
+
 # join ----
+band_members
 band_members
 band_instruments
 band_instruments2
@@ -31,25 +36,17 @@ band_members |>
   full_join(band_instruments) |> 
   drop_na(band, plays)
 
-# replace_na()
+# replace_na() ----
 band_members |> 
   full_join(band_instruments) |> 
-  replace_na(replace = list(band = 'b', band = 'p'))
-
-band_members |> 
-  full_join(band_instruments) |> 
-  replace_na(replace = list(band = 'b', plays = 'p'))
-
-band_members |> 
-  full_join(band_instruments) |> 
-  replace_na(list(band = "Unknown", plays = "Unknown"))
+  replace_na(list(band = "Unknown", plays = "Unknown_plays"))
 
 
 # starwars ----
 # replace_na () ----
+smiths
 smiths |> 
-  replace_na(list(age = 44, weight = 87))
-
+  replace_na(list(age = 20, weight = 87))
 
 # replace_na
 starwars |> 
@@ -57,11 +54,15 @@ starwars |>
 
 starwars |> 
   #filter(is.na(mass))
-  replace_na(list(mass = mean(starwars$mass, na.rm = T))) #|> 
+  replace_na(list(mass = mean(starwars$mass, na.rm = T))) |> 
+  print(n = 30)
 filter(is.na(mass))
 
 #
+starwars |> print(n = 20)
 starwars |> 
   #filter(is.na(mass))
-  replace_na(list(mass = mean(starwars$mass, na.rm = T))) #|> 
+  replace_na(list(mass = mean(starwars$mass, na.rm = T))) |> 
+  print(n = 20)
+
 mean(starwars$mass, na.rm = T)

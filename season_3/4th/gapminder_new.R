@@ -59,9 +59,3 @@ gapminder_3pop_join |>
   str_trim(side = right, string = population, 1)
   separate(col = population, into = c('population_new'), sep = 'M')
 
-?str_trim
-  
-
-gapminder_3pop_join |> 
-  ggplot(aes(x = year, y = ))
-

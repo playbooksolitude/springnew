@@ -15,7 +15,6 @@ storms |> count(name)
 storms$name |> table() |> data.frame()
 storms$name |> n_distinct()
 storms |> count(year) 
-storms
 ?storms
 
 # geom_path year ----
@@ -106,3 +105,30 @@ starwars |>
   filter(species == "Droid")
 starwars |> 
   count(species) |> print(n = Inf)
+
+
+#
+# ggplot2 패키지 로드
+library(ggplot2)
+
+# 데이터 프레임 생성
+(data <- tibble(
+  x = c(1, 2, 3, 4, 5, 4, 3, 2, 1),
+  y = c(1, 2, 1, 2, 1, 0, 1, 0, 1)))
+
+# ggplot을 사용하여 geom_path()로 선 그리기
+
+ggplot(data, aes(x = x, y = y)) +
+  geom_path() +
+  ggtitle("Example of geom_path()") +
+  xlab("X axis") +
+  ylab("Y axis") -> temp_p
+
+ggplot(data, aes(x = x, y = y)) +
+  geom_line() +
+  ggtitle("Example of geom_line()") +
+  xlab("X axis") +
+  ylab("Y axis") -> temp_l
+
+library(patchwork)
+temp_p / temp_l

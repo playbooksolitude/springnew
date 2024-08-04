@@ -6,18 +6,6 @@ library(treemapify)
 library(nord)
 
 
-#
-smiths
-smiths |> 
-  add_row(subject = 'yohan', time = 2, age = c(34, 44), 
-          weight = NULL, height = 184)
-
-smiths$age <- NA
-smiths$age <- NULL
-smiths
-data("smiths")
-smiths
-
 smiths |> 
   pivot_longer(cols = c(time:height), names_to = "type", values_to = "value")
 

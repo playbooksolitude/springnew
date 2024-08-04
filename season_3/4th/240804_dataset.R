@@ -1,13 +1,68 @@
 ## 24-0804 sun 11:21
 
 #
+library(tidyverse)
 data()
+?smiths
+library(tidyr)
 
+#내장 데이터 초기화
+smiths |> 
+  select(-time)
+
+smiths$time <- NULL
+smiths
+smiths$age <- NULL
+smiths
+data("smiths")
+smiths |> 
+  select(-age, -weight)
+
+starwars |> 
+  filter(is.na(mass))
+
+#
+starwars |> 
+  drop_na(mass, height)
+
+#평균 체중
+starwars |> 
+  filter(is.na(mass))
+
+mean(starwars$mass, na.rm = T)
+sum(starwars$mass)
+
+starwars |> 
+  drop_na(mass) -> temp1
+mean(temp1$mass)
+
+starwars |> 
+  drop_na(mass) |> 
+  mutate(mean_mass = mean(mass), .before = 1)
+
+#### dataset 전체 강제 조회
 # all that dataset available
 data(package = .packages(all.available = TRUE))
 
+#babynames
+#install.packages('babynames')
+library(babynames)
+babynames::babynames
+
+install.packages('fueleconomy')
+library(fueleconomy)
+fueleconomy::vehicles
+
+?babynames
+vehicles |> 
+  arrange(desc(year))
+
+
+#install.packages('fivethirtyeight')
 library(fivethirtyeight)
 fivethirtyeight::avengers
+library(babynames)
+babynames
 
 #
 # AirPassengers                 Monthly Airline Passenger Numbers 1949-1960
