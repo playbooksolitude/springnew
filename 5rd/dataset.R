@@ -100,6 +100,11 @@ fueleconomy::common
 fueleconomy::vehicles
 
 #
+library(survey)
+data()
+
+
+#
 babynames::babynames |> 
   group_by(year, sex) |> 
   reframe(sum = sum(n)) |> 
@@ -127,8 +132,15 @@ fueleconomy::vehicles |>
   count(make)
 
 
+#
+movies |> 
+  count(year) |> tail()
+movies |> 
+  filter(year == '2005') |> head() |> print(n = 6, width = Inf)
 
+#
 
+as_factor(mpg$manufacturer) -> mpg$manufacturer
 
 
 
