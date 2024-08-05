@@ -10,9 +10,9 @@ library(bbplot)
 # 연도 범위: 1880년부터 현재까지
 
 #
-babynames |> 
+(babynames |> 
   group_by(year, sex) |> 
-  reframe(sum = sum(n)) -> baby_1groupby
+  reframe(sum = sum(n)) -> baby_1groupby)
 
 factor(baby_1groupby$sex) |> 
   fct_relevel(c('M', 'F')) -> baby_1groupby$sex
@@ -32,3 +32,26 @@ baby_1groupby |>
   # ggplot(aes(x = sex, y = year, fill = sum)) +
   # geom_tile() +
   # geom_text(aes(label = sum))
+
+#
+babynames::applicants
+babynames::babynames
+babynames::births
+babynames::lifetables
+
+#
+babynames |> str()
+babynames |> 
+  filter(is.na(year))
+
+starwars |> 
+  is.na() |> 
+  colSums() |> 
+  data.frame() |> 
+  rownames_to_column('starwars')
+
+colSums(is.na(starwars)) |> 
+  as.data.frame() |> 
+  as_tibble(rownames = "col")
+
+is.na(babynames) |> sum()
