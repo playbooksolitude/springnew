@@ -4,6 +4,16 @@
 library(tidyverse)
 diamonds
 diamonds |> str()
+diamonds |> 
+  group_by(cut, color, clarity) |> 
+  reframe(n = n())
+
+diamonds |> 
+  #count(cut)
+  count(clarity)
+
+diamonds |> 
+  glimpse() 
 
 babynames |> str()
 babynames |> glimpse()
