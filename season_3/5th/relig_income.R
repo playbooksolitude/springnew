@@ -4,10 +4,15 @@
 library(tidyverse)
 library(treemapify)
 library(nord)
+library(tidyr)
 
 
 smiths |> 
-  pivot_longer(cols = c(time:height), names_to = "type", values_to = "value")
+  pivot_longer(cols = c(time:height), 
+               names_to = "type", values_to = "value") |> 
+  ggplot(aes(x = subject, fill = type)) +
+  geom_bar(stat = 'count', position = 'dodge') +
+  bbc
 
 #
 relig_income
