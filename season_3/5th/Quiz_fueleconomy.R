@@ -36,7 +36,7 @@ vehicles |>
              aes(label = scales::comma(after_stat(count))), 
              size = 6) +
   #coord_flip() +
-  theme(axis.text.x = element_text(angle = 45, 
+  theme(axis.text.x = element_text(angle = 30, 
                                    size = 16,
                                    hjust = .9)) +
   scale_y_continuous(limits = c(0,15000)) +
