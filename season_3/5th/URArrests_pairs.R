@@ -69,3 +69,5 @@ pairs(iris[, 1:4],
 iris[,1:4]
 
 
+mtcars |> 
+  pairs(panel = panel.smooth, col = mtcars$mpg)
