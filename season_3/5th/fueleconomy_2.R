@@ -264,11 +264,3 @@ vehicles |>
   geom_point(alpha = .1) +
   geom_smooth(method = 'lm')  +
   facet_wrap(.~fuel)
-
-#
-#install.packages('GGally')
-#library(GGally)
-vehicles |> select(year, cyl, displ, hwy, cty) -> vehicles2 
-vehicles2 |> 
-  pairs(panel = panel.smooth, 
-        col = vehicles2$year)
