@@ -19,6 +19,7 @@ library(tidyverse)
 
 #1 colorspace ----
 library(colorspace)
+colorspace::hcl_palettes(plot = T)
 
 # 샘플 데이터
 df <- data.frame(
@@ -58,6 +59,9 @@ ggplot(df, aes(x = category, y = value, fill = group)) +
  
 #2 RColorBrewer 팔레트 사용 예제 ----
 library(RColorBrewer)
+02::display.brewer.all()
+
+
 ggplot(df, aes(x = category, y = value, fill = group)) +
   geom_bar(stat = "identity", position = "dodge") +
   scale_fill_brewer(palette = "Set1") +  # RColorBrewer 팔레트 사용
@@ -502,9 +506,10 @@ ggplot(df, aes(x = category, y = value, fill = group)) +
   theme_minimal() +
   labs(title = "TVThemes Palette Example", subtitle = "Using tvthemes::stevenuniverse")
 
-
-
-
+#24 nord ----
+library(nord)
+nord::nord_palettes
+nord::nord_show_palette('afternoon_prarie')
 
 
 

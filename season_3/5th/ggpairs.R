@@ -52,3 +52,22 @@ ggplot(data = heatmap,
        aes(x = Var1, y = Var2, fill = value)) +
   geom_tile() +
   geom_text(aes(label = round(value,2)), color = 'white')
+
+
+# ----
+library(GGally)
+data(iris)
+
+ggpairs(
+  data = iris,
+  columns = 1:4,
+  mapping = ggplot2::aes(color = Species),
+  title = "Iris Data Pair Plot",
+  upper = list(continuous = "cor"),
+  lower = list(continuous = "smooth"),
+  diag = list(continuous = "densityDiag"),
+  axisLabels = "internal",
+  showStrips = FALSE,
+  labeller = label_both,
+  cardinality_threshold = 10,
+  progress = TRUE)

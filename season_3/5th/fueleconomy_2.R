@@ -8,11 +8,29 @@ library(fueleconomy)
 library(tidyverse)
 
 #0 데이터셋 확인 ----
-head(vehicles)
-vehicles |> str()
-vehicles |> 
+head(vehicles)      #첫번째 6줄
+vehicles |> str()   #구조
+vehicles |>         #character -> factor() 변경해 level 보기
   mutate_at(vars(make, model, class, trans, drive, fuel), factor) |> 
   str() #drive factor w/ 7 levels 
+vehicles |>      
+  select(year, cyl, displ, hwy, cty) |> 
+  pairs(vehicles)      
+
+
+ggpairs(iris, mapping = ggplot2::aes(color = Species))
+
+iris |> select(1:4) |> head()
+ggpairs(data = iris, columns = c(1:5), aes(color = Species))
+
+ggpairs(data = vehicles, 
+        columns = c('year','displ', 'hwy', 'cty', 'drive'),
+        aes(color = drive),
+        title = 'vehicles')
+mpg |> head()
+
+ggpairs(data = mpg, columns = c('cty', 'hwy', 'drv'),
+        aes(color = drv), title = 'mpg')
 
 #1 ----
 # 제조사별 평균 고속도로 연비를 계산하세요.
