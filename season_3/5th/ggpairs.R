@@ -65,9 +65,9 @@ ggpairs(
   title = "Iris Data Pair Plot",
   upper = list(continuous = "cor"),
   lower = list(continuous = "smooth"),
-  diag = list(continuous = "densityDiag"),
+  diag = list(continuous = "blankDiag"),
   axisLabels = "internal",
-  showStrips = FALSE,
+  showStrips = F,
   labeller = label_both,
   cardinality_threshold = 10,
   progress = TRUE)
