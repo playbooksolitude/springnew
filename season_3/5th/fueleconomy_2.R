@@ -5,19 +5,19 @@
 # 기본
 #install.packages("fueleconomy")
 library(fueleconomy)
-library(dplyr)
 library(tidyverse)
 
 #0 데이터셋 확인 ----
 head(vehicles)
+vehicles |> str()
 vehicles |> 
   mutate_at(vars(make, model, class, trans, drive, fuel), factor) |> 
-  str()
+  str() #drive factor w/ 7 levels 
 
 #1 ----
 # 제조사별 평균 고속도로 연비를 계산하세요.
 # 결과는 평균 연비가 높은 순서로 정렬하세요.
-# 힌트: group_by()와 reframe() 함수를 사용하세요.
+# 힌트: group_by()와 reframe(), mean() 함수를 사용하세요.
 vehicles  |> 
   group_by(make) |>
   reframe(avg_hwy = mean(hwy, na.rm = TRUE)) |>
@@ -265,3 +265,10 @@ vehicles |>
   geom_smooth(method = 'lm')  +
   facet_wrap(.~fuel)
 
+#
+#install.packages('GGally')
+#library(GGally)
+vehicles |> select(year, cyl, displ, hwy, cty) -> vehicles2 
+vehicles2 |> 
+  pairs(panel = panel.smooth, 
+        col = vehicles2$year)
