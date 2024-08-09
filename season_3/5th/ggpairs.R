@@ -5,6 +5,20 @@
 #install.packages('GGally')
 #library(GGally)
 
+ggpairs(iris, mapping = ggplot2::aes(color = Species))
+
+iris |> select(1:4) |> head()
+ggpairs(data = iris, columns = c(1:5), aes(color = Species))
+
+ggpairs(data = vehicles, 
+        columns = c('year','displ', 'hwy', 'cty', 'drive'),
+        aes(color = drive),
+        title = 'vehicles')
+mpg |> head()
+
+ggpairs(data = mpg, columns = c('cty', 'hwy', 'drv'),
+        aes(color = drv), title = 'mpg')
+
 
 # exam
 # 상관 행렬 시각화
