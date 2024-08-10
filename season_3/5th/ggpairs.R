@@ -1,9 +1,16 @@
-#24-0808 thu 15:51
+#24-0808 thu 20:28
+library(tidyverse)
+library(GGally)
+iris |> head()
+iris |> str()
+ggpairs(data = iris, aes(color = Species))
+
+#-----
 
 #ggpairs()
 
 #install.packages('GGally')
-#library(GGally)
+library(GGally)
 
 
 # exam
