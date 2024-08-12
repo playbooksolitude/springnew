@@ -48,7 +48,7 @@ babynames |>
 (factor(baby_1groupby$sex) |> 
   fct_relevel(c('F', 'M')) -> baby_1groupby$sex)
 (factor(baby_2groupby$sex) |> 
-    fct_relevel(c('', 'M')) -> baby_2groupby$sex)
+    fct_relevel(c('F', 'M')) -> baby_2groupby$sex)
 
 # M #red ----
 baby_1groupby |> 
@@ -116,12 +116,16 @@ baby_1groupby |>
   ggtitle(label = 'USA Babynames') +
   scale_y_continuous(labels = scales::comma)
 
-
-?babynames
+#
   #pivot_wider(names_from = sex, values_from = sum) |> 
   # ggplot(aes(x = sex, y = year, fill = sum)) +
   # geom_tile() +
   # geom_text(aes(label = sum))
+#
+babynames |> 
+  
+
+
 
 #
 babynames::applicants
@@ -134,11 +138,6 @@ babynames |> str()
 babynames |> 
   filter(is.na(year))
 
-starwars |> 
-  is.na() |> 
-  colSums() |> 
-  data.frame() |> 
-  rownames_to_column('starwars')
 
 colSums(is.na(starwars)) |> 
   as.data.frame() |> 
@@ -146,8 +145,3 @@ colSums(is.na(starwars)) |>
 
 is.na(babynames) |> sum()
 
-
-huron <- data.frame(year = 1875:1972, level = as.vector(LakeHuron))
-h <- ggplot(huron, aes(year))
-
-h + geom_ribbon(aes(ymin=0, ymax=level))
