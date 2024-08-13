@@ -4,6 +4,7 @@ format: html
 editor: visual
 ---
 
+
 ## Quarto
 
 Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
@@ -11,6 +12,7 @@ Quarto enables you to weave together content and executable code into a finished
 ## Running Code
 
 When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
 
 ```{r setup, message=FALSE, warning=FALSE}
 
@@ -21,14 +23,18 @@ library(ggradar)
 
 ```
 
+
 You can add options to executable code like this
+
 
 ```{r }
 #| echo: false
 2 * 2
 ```
 
+
 The `echo: false` option disables the printing of code (only output is displayed).
+
 
 ```{r }
 #| echo: false
@@ -39,7 +45,9 @@ mpg |>
 
 ```
 
+
 ## pairs() 기본 함수
+
 
 ```{r}
 
@@ -48,7 +56,9 @@ mtcars |>
 
 ```
 
+
 ## iris
+
 
 ```{r}
 
@@ -58,7 +68,9 @@ iris |>
 
 ```
 
+
 ## ggpairs
+
 
 ```{r}
 
@@ -67,7 +79,9 @@ iris |>
 
 ```
 
+
 ## ggradar
+
 
 ```{r}
 
@@ -80,7 +94,9 @@ mtcars |>
 
 ```
 
+
 ### CHECK
+
 
 ```{r}
 
@@ -90,7 +106,9 @@ mtcars |>
 
 ```
 
+
 ### MPG
+
 
 ```{r warning=FALSE}
 
@@ -106,7 +124,9 @@ ggplot() +
 
 ```
 
+
 ## MPG aes(color)
+
 
 ```{r}
 
@@ -117,3 +137,4 @@ ggplot(data = mpg,
   facet_wrap(.~drv)
   
 ```
+
