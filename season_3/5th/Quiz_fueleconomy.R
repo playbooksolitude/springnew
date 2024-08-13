@@ -21,7 +21,7 @@ vehicles
 vehicles |> glimpse()
 vehicles |> str()
 
-#1-3 cyl은 총 몇개의 종류가 있는가?
+#1-3 cyl 열의 관측값 종류는 총 몇개인가?
 #128개
 vehicles$cyl |> table()
 vehicles |> count(cyl)

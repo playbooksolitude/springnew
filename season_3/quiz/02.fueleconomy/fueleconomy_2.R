@@ -44,6 +44,12 @@ vehicles |>
   filter(year == 2015) |>
   reframe(avg_cty = mean(cty, na.rm = TRUE))
 
+vehicles  |> 
+  group_by(make) |>
+  reframe(avg_hwy = mean(hwy)) |>
+  arrange(desc(avg_hwy)) |> view()
+
+
 
 #3 goem_point ----
 # x = displ, y = cty, goem_point 그래프를 그리시오.
@@ -66,11 +72,12 @@ vehicles |>
 
 
 #5 연도별 Tesla  차량수 ----
-# Tesla가 생산한 차량을 연도별로 계산하시오.
+# Tesla와 Toyota가 생산한 차량을 연도별로 계산하시오.
 # filter(), count(), make, year 
 
 vehicles |>
-  filter(make == "Tesla") |>
+  filter(year >= 2010,
+    make %in% c("Tesla", 'Toyota')) |>
   group_by(year) |> 
   count(make)
 
@@ -88,13 +95,13 @@ vehicles |>
 
 #7 연도별 Hyundai 자동차 모델 수----
 # Hyundai의 자동차 생산 대수를 연도별 막대그래프로 시각화하시오
-# 기간 : 1991년~ 2014년
+# 기간 : 2001년~ 2014년
 # geom_label를 활용하세요
 # group_by(), reframe(), year, make, n(), goem_bar()
 
 vehicles |> 
   filter(make %in% c("Hyundai"), 
-         year >= 1991, year <=2014) |> 
+         year >= 2001, year <=2014) |> 
   group_by(year) |> 
   reframe(n = n()) |> 
   ggplot(aes(x = year, y = n)) +
@@ -103,26 +110,26 @@ vehicles |>
   
 
 #8 4 레이블 및 제목 추가 ----
-# 평균 도시연비가  가장 좋은 모델 20개를 시각화하시오
+# Toyota 차량 중 도시연비가 가장 좋은 모델 10개를 시각화하시오
   # 내림차순으로 정렬하시오
   # xlab(), ylab()
   # make, model
   # geom_bar(), coord_flip(), geom_label(), mean(), fct_reorder()
 
 vehicles |> 
-    group_by(make, model) |> 
-    reframe(mean_cty = mean(cty, na.rm = T)) |> 
+  filter(make == 'Mercedes-Benz') |> 
+  group_by(model, year, drive, fuel) |> 
+  reframe(mean_cty = mean(cty)) |> 
   arrange(desc(mean_cty)) |> 
-  head(20) |> 
-    ggplot(aes(x = model |> fct_reorder(mean_cty), 
-               y = mean_cty)) +
-    geom_bar(stat = 'identity') +
-    coord_flip() +
-    geom_label(aes(label = round(mean_cty,1))) +
-    xlab("model") +
-    ylab("mean cty") +
-  ggtitle(label = 'Top20 mean_cty')
-  
+  head(5) |> 
+  ggplot(aes(x = model |> fct_reorder(mean_cty), 
+             y = mean_cty)) +
+  geom_bar(stat = 'identity') +
+  geom_label(aes(label = mean_cty), size = 6) +
+  coord_flip() +
+  ggtitle(label = 'Top5 Mercedes-Benz', subtitle = 'mean_cty') +
+  bbc_style() 
+
 
 #9 동점처리 ----
 # 연료별로 자동차 수가 많은 top 10를 조회하시오 (fuel)
@@ -254,19 +261,31 @@ vehicles |>
   #      plot.title = element_text(size = 28)) 
 
 vehicles |>
-  drop_na(fuel, drive) |> 
-  count(fuel, drive) |> 
-  ggplot(aes(x = drive, y = fuel, fill = n)) +
+  drop_na(fuel, cyl) |> 
+  count(fuel, cyl) |> 
+  ggplot(aes(x = factor(cyl), y = fuel, fill = n)) +
   geom_tile() +
   geom_text(aes(label = n), color = 'white') +
+  xlab('cyl') 
+
+
+# 19 theme_minimal()
+# 18번에서 만든 그래프에 theme_minimal을 적용하시오
+# theme() 함수를 사용해 심미성을 높이시오
+
+vehicles |>
+  drop_na(fuel, cyl) |> 
+  count(fuel, cyl) |> 
+  ggplot(aes(x = factor(cyl), y = fuel, fill = n)) +
+  geom_tile() +
+  geom_text(aes(label = n), color = 'white') +
+  xlab('cyl') +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 12),
-       axis.text.y = element_text(size = 12),
-       plot.title = element_text(size = 28)) +
-  labs(title = 'drive x fuel', x = 'Drive',  y= 'Fuel')
+  theme(axis.text.y = element_text(size = 12),
+        legend.position='none') 
 
 
-#19 boxplot ----
+#20 boxplot ----
 # 연료 유형별 고속도로 연비 분포를 상자 그림으로 시각화하시오.
 # x = fuel, y = hwy
 # ggplot(), geom_boxplot()을 사용하시오.
@@ -281,7 +300,9 @@ vehicles |>
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
 
-#20 mutate ----
+
+
+#21 mutate ----
 # 고속도로 연비보다 도시연비가 좋은 차 5대,  도시연비보다 고속도로 연비가 좋은 차 5대를 한 화면에 출력하시오
 # mutate(), arrange(), slice()
 
@@ -290,21 +311,14 @@ vehicles |>
   arrange(gap) |> 
   slice(1:5, 33438:33442)
     
-#21 배기량과 고속도로 연비----
-# 배기량과 고속도로 연비 간의 관계를 산점도로 시각화하시오.
-# geom_point(alpha)를 사용하시오.
-# facet_wrap(drive) 적용해보세요
-# 배기량과 고속도로 연비 간의 관계 산점도 시각화
 
-vehicles |>
-  drop_na(displ) |> 
-  ggplot(aes(x = displ, y = hwy)) +
-  geom_point(alpha = 0.1) +
-  ggtitle("Displacement vs Highway") +
-  facet_wrap(.~drive)
+#22 histogram
+vehicles |> 
+  ggplot(aes(x = hwy)) +
+  geom_histogram(binwidth = 3)
 
 
-#22 선형 회귀 ----
+#23 선형 회귀 ----
 # 도시 연비와 고속도로 연비를 선형회귀로 시각화 하시오.
 # geom_smooth(), geom_point()을 사용하시오.
 # 배기량별 평균 고속도로 연비 꺾은선 그래프 시각화
@@ -333,10 +347,7 @@ vehicles |>
   count(fuel) |> select(1)
   with(fuel)
   
-#23 histogram
-vehicles |> 
-  ggplot(aes(x = hwy)) +
-  geom_histogram(binwidth = 3)
+
 
 vehicles |> 
   count(cty, hwy) |> 

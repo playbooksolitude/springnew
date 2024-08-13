@@ -1,0 +1,506 @@
+---
+title: "(점프) 모두의 데이터 스터디"
+subtitle : "fueleconomy QUIZ"
+output: html_document
+date: "2024-08-09"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(fueleconomy)
+library(bbplot)
+library(showtext)
+showtext_auto()
+
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+<br>
+
+## Spring Quiz
+```{r eval=FALSE}
+
+library(fueleconomy)
+library(tidyverse)
+vehicles |> head()
+vehicles |> glimpse()
+vehicles |>         
+  mutate_at(vars(make, model, class, trans, drive, fuel), factor) |> 
+  str() 
+vehicles |> 
+  is.na() |> 
+  colSums() |> 
+  as_tibble(rownames = 'NA')
+```
+<br>
+
+### 1. geom_point()
+> x = displ, y = cty, goem_point 그래프를 그리시오<br>
+> NA값은 제외하시오 (57개)<br>
+> - drop_na(), geom_point(alpha = .3)
+
+```{r, echo=FALSE}
+
+vehicles |>
+  drop_na(displ) |> 
+  ggplot(aes(x = displ, y = cty)) +
+  geom_point(alpha = .3)
+
+```
+
+### 2. group_by(), reframe()
+> 제조사별 평균 고속도 연비를 계산하시오 <br>
+> - group_by(), reframe(), mean()
+
+```{r, echo=FALSE}
+
+
+vehicles  |> 
+  group_by(make) |>
+  reframe(avg_hwy = mean(hwy, na.rm = TRUE)) |>
+  arrange(desc(avg_hwy))
+
+```
+<br>
+
+### 3. reframe(), mean()
+> 2015년 차량들의 평균 도시 연비 계산하시오 <br>
+> - filter(), reframe(), year, cty
+
+```{r, echo=FALSE}
+
+
+vehicles |>
+  filter(year == 2015) |>
+  reframe(avg_cty = mean(cty, na.rm = TRUE))
+
+```
+<br>
+
+### 4. arrange(), desc()
+> 모델수가 가장 많은 제조사 3개의 모델수는 각각 몇개인지 계산하시오<br>
+> - count(), arrange(), head(), desc(), make
+
+```{r, echo=FALSE}
+
+vehicles |>
+  count(make) |>
+  arrange(desc(n)) |>
+  head(3)
+```
+<br>
+
+### 5. filter(%in%)
+> 2010년 이후 Tesla와 Toyota가 생산한 차량을 연도별로 계산하시오<br>
+> - filter(), count(), make, year, 
+
+```{r, echo=FALSE}
+
+vehicles |>
+  filter(year >= 2010,
+    make %in% c("Tesla", 'Toyota')) |>
+  group_by(year) |> 
+  count(make)
+
+```
+<br>
+
+### 6. pivot_wider() ---- 어려움
+> 2010년부터 2013년까지 전기차량의 drive와 class를 계산해 넓은 형식으로 출력하시오<br>
+> - filter(), count(), pivot_wider(name_from = drive, value_from = n)<br>
+> - Electricity, year, class, drive
+
+```{r, echo=FALSE}
+
+vehicles |> 
+  filter(year >= 2010, year < 2014, fuel %in% c('Electricity')) |> 
+  count(drive, class) |> 
+  pivot_wider(names_from = drive, values_from = n)
+
+```
+<br>
+
+### 7.geom_bar(), geom_label()
+> Hyundai의 자동차 생산 대수를 연도별 막대그래프로 시각화하시오<br>
+> 기간 : 2001년~ 2014년<br>
+> - group_by(), reframe(), year, make, n(), goem_bar(), geom_label()
+
+```{r, echo=FALSE}
+
+vehicles |> 
+  filter(make %in% c("Hyundai"), 
+         year >= 2001, year <=2014) |> 
+  group_by(year) |> 
+  reframe(n = n()) |> 
+  ggplot(aes(x = year, y = n)) +
+  geom_bar(stat = 'identity') +
+  geom_label(aes(label = n))
+  
+
+```
+<br>
+
+### 8. bbc_style(), coord_flip() --- 어려움
+> '메르세데스-벤츠'(Mercedes-Benz) 차량 중 도시연비가  가장 좋은 모델 5개를 시각화하시오<br>
+> 내림차순으로 정렬하시오<br>
+> - make, year, cty, drive, fuel, model<br>
+> - bbc_style(), ggtitle()<br>
+> - geom_bar(), geom_label(), mean(), fct_reorder(), head(), coord_flip()<br>
+
+```{r, echo=FALSE, warning=FALSE}
+
+vehicles |> 
+  filter(make == 'Mercedes-Benz') |> 
+  group_by(model, year, drive, fuel) |> 
+  reframe(mean_cty = mean(cty)) |> 
+  arrange(desc(mean_cty)) |> 
+  head(5) |> 
+    ggplot(aes(x = model |> fct_reorder(mean_cty), 
+               y = mean_cty)) +
+    geom_bar(stat = 'identity') +
+    geom_label(aes(label = mean_cty), size = 6) +
+  coord_flip() +
+  ggtitle(label = 'Top5 Mercedes-Benz', subtitle = 'mean_cty') +
+  bbc_style() 
+  
+```
+<br>
+
+### 9. top_n(), arrange(), slice_max(with_ties = F)
+> 연료를 기준으로 자동차 수를 상위 10개만 출력하시오<br>
+> - top 10 안에 동점이 있을 경우 모두 포함하시오<br>
+> - fuel, count()<br>
+
+```{r, echo=FALSE}
+
+vehicles |> count(fuel, sort = T) |> top_n(10)
+
+```
+<br>
+
+### 10. NA 조회
+> trans의 종류는 총 몇개인가?<br>
+> - 힌트 없음<br>
+
+```{r, echo=FALSE}
+
+vehicles |> 
+  drop_na(trans) |> 
+  count(trans, sort = T)
+
+```
+<br>
+
+### 11. NA 조회 (중요)
+> 모든 컬럼에 NA 여부를 계산하고 tibble 형태로 출력하시오<br>
+> - is.na(), colSums(), as_tibble()<br>
+
+```{r, echo=FALSE}
+vehicles |> 
+  is.na() |> 
+  colSums() |> 
+  as_tibble(rownames = 'NA')
+
+
+```
+<br>
+
+### 12. mean() 함정1
+> 2010년부터 2015년까지 평균 도시연비가 높은 제조사 Top 5를 시각화하라<br>
+> - geom_bar(), filter(), group_by(), reframe(), top_n(), geom_label()<br>
+
+```{r, echo=FALSE}
+
+vehicles |>
+  filter(year >= 2010, year <= 2015) |> 
+  group_by(make) |>
+  reframe(avg_cty = mean(cty, na.rm = TRUE), 
+          n = n()) |>
+  top_n(5, avg_cty) |>
+  ggplot(aes(x = reorder(make, -avg_cty), y = avg_cty)) +
+  geom_bar(stat = "identity") +
+  geom_label(aes(label = round(avg_cty,1)), size = 6) +
+  ggtitle("Top 10 mean_cty") +
+  xlab("") +
+  ylab("")
+
+```
+<br>
+
+### 13. mean() 함정2
+> 2010년부터 2015년까지 <span style="color:red">생산 모델수가 5개 이상인 제조사 중</span> 평균 도시연비가 높은 제조사 Top 5를 시각화하라<br>
+> 12번 그래프와 비교하라<br>
+> - geom_bar(),xlab(), ylab(), top_n(), geom_label(), n()<br>
+
+```{r, echo=FALSE}
+
+vehicles |>
+  filter(year >= 2010, year <= 2015) |> 
+  group_by(make) |>
+  reframe(avg_cty = mean(cty, na.rm = TRUE), 
+          n = n()) |>
+  filter(n >= 5) |> 
+  top_n(5, avg_cty) |> 
+  ggplot(aes(x = reorder(make, -avg_cty), y = avg_cty)) +
+  geom_bar(stat = "identity") +
+  geom_label(aes(label = round(avg_cty,1)), size = 6) +
+  ggtitle("평균의 함정") +
+  xlab("") +
+  ylab("") 
+
+
+```
+<br>
+
+### 14. geom_jitter()
+>  4기통 자동차와 8기통 자동차의 도시 연비와 고속도로 연비를 시각화 하시오<br>
+> geom_jitter(), filter(), factor(cyl)<br>
+> - cty, hwy,  alpha = .3, ggtitle() <br>
+
+```{r, echo=FALSE}
+
+vehicles |> 
+  filter(cyl %in% c(4,8)) |>
+  ggplot(aes(x = cty, y = hwy, color = factor(cyl))) +
+  geom_jitter(alpha = .3) +
+  ggtitle("cty x hwy") 
+
+```
+<br>
+
+### 15. fecet_wrap()면분할
+> 위 그래프를 drive 별로 면분할 하시오<br>
+> geom_jitter(), filter(), factor(cyl)<br>
+> - cty, hwy,  alpha = .3, ggtitle(), facet_wrap() <br>
+
+```{r, echo=FALSE}
+
+vehicles |> #str()
+  filter(cyl %in% c(4,8)) |>
+  ggplot(aes(x = cty, y = hwy, color = factor(cyl))) +
+  geom_jitter(alpha = .3) +
+  facet_wrap(.~drive) +
+  ggtitle("cty x hwy", subtitle = 'facet_wrap') 
+
+
+```
+
+<br>
+
+### 16. 요약통계
+> cyl(실린더) 크기를 기준으로 displ(배기량)의 요약통계를 계산하시오<br>
+> - group_by(), reframe(), mean(), median(), sd(), min(), max() <br>
+
+
+```{r, echo=FALSE}
+
+vehicles %>%
+  group_by(cyl) |> 
+  reframe(
+    mean_displ = mean(displ, na.rm = TRUE),
+    median_displ = median(displ, na.rm = TRUE),
+    sd_displ = sd(displ, na.rm = TRUE),
+    min_displ = min(displ, na.rm = TRUE),
+    max_displ = max(displ, na.rm = TRUE))
+
+```
+
+### 17. x축 레이블 회전
+> 2014년 기준 제조사별 평균 배기량(displ)을 막대 그래프로 시각화하시오<br>
+> na 제거 <br>
+> - group_by(), reframe(), geom_bar()를 사용하시오<br>
+> - theme(axis.text.x = element_text(angle = 90, hjust = 1))<br>
+
+```{r, echo=FALSE}
+
+vehicles |>
+  filter(year == 2014) |> 
+  drop_na(displ) |> 
+  group_by(make) |>
+  reframe(avg_displ = mean(displ, na.rm = TRUE)) |>
+  ggplot(aes(x = reorder(make, -avg_displ), y = avg_displ)) +
+  geom_bar(stat = "identity") +
+  ggtitle("Average Displacement by Manufacturer") +
+  xlab("make") +
+  ylab("mean displ") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+
+```
+<br>
+
+### 18. geom_tile(), xlab()
+> fuel, drive의 자동차 대수를 히트맵으로 시각화하시오<br>
+> - x = fuel, y = drive<br>
+> - count(), ggplot(), geom_tile()<br>
+
+```{r,echo=FALSE}
+
+vehicles |>
+  drop_na(fuel, cyl) |> 
+  count(fuel, cyl) |> 
+  ggplot(aes(x = factor(cyl), y = fuel, fill = n)) +
+  geom_tile() +
+  geom_text(aes(label = n), color = 'white') +
+  xlab('cyl') 
+  
+
+```
+<br>
+
+### 19. theme_minimal(), theme()
+> 18번에서 만든 그래프에 theme_minimal을 적용하시오
+> theme() 함수를 사용해 심미성을 높이시오
+
+
+```{r, echo=FALSE}
+
+vehicles |>
+  drop_na(fuel, cyl) |> 
+  count(fuel, cyl) |> 
+  ggplot(aes(x = factor(cyl), y = fuel, fill = n)) +
+  geom_tile() +
+  geom_text(aes(label = n), color = 'white') +
+  xlab('cyl') +
+  theme_minimal() +
+theme(axis.text.y = element_text(size = 12),
+      legend.position='none') 
+
+```
+
+
+
+### 20. boxplot()
+> 연료 유형별 고속도로 연비 분포를 상자 그림으로 시각화하시오<br>
+> geom_jitter(width = .1, alpha = .1)을 덧붙이세요
+> - x = fuel, y = hwy, ggplot(), geom_boxplot()<br>
+
+```{r, echo=FALSE}
+
+vehicles |>
+  ggplot(aes(x = fuel, y = hwy)) +
+  geom_jitter(width = .1, alpha = .1) +
+  geom_boxplot() +
+  ggtitle("Highway MPG Distribution by Fuel Type") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+```
+<br>
+
+### 21. mutate(), slice()
+> (A)고속도로 연비보다 도시연비가 좋은 차 5대를 출력하시오
+> (B) 도시연비보다 고속도로 연비가 좋은 차 5대를 출력하시오
+> A와 B를 한 화면에 출력하시오
+> - mutate(), arrange(), slice()<br>
+
+```{r, echo=FALSE}
+
+vehicles |>
+  mutate(gap = hwy - cty, .before = 1) |> 
+  arrange(gap) |> 
+  slice(1:5, 33438:33442)
+
+
+```
+
+### 22. geom_histogram()
+> 고속도로 연비의 분포를 히스토그램으로 그리시오
+> - geom_histogram(), binwidth = 3
+
+```{r, echo=FALSE}
+
+vehicles |> 
+  ggplot(aes(x = hwy)) +
+  geom_histogram(binwidth = 3)
+
+```
+<br>
+
+### 23. 선형 회귀
+> 도시 연비와 고속도로 연비를 선형회귀로 시각화 하시오.
+> - geom_smooth(), geom_point()
+
+```{r, echo=FALSE}
+
+vehicles |>
+  ggplot(aes(x = cty, y = hwy)) +
+  geom_point(alpha = .1) +
+  geom_smooth(method = 'lm')  +
+  facet_wrap(fuel~., ncol = 3)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

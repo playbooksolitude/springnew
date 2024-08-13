@@ -19,8 +19,9 @@ ggpairs(data = iris, columns = c(1:5), aes(color = Species))
 
 ggpairs(data = vehicles, 
         columns = c('year','displ', 'hwy', 'cty', 'drive'),
-        aes(color = drive),
+        #aes(color = drive),
         title = 'vehicles')
+
 mpg |> head()
 
 ggpairs(data = mpg, columns = c('cty', 'hwy', 'drv'),
