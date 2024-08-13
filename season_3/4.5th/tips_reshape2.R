@@ -82,6 +82,7 @@ ggplot(data = tips,
 # ggridges 패키지 설치 및 로드
 #install.packages("ggridges")
 library(ggridges)
+?ggridges
 
 # 릿지 플롯 시각화
 ggplot(tips, aes(x = tip, y = day, fill = day)) +
