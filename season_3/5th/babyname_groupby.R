@@ -11,6 +11,7 @@ library(bbplot)
 #1 연도별로 태어난 아이의 수를 구하시오 ---- 
 ## group_by()
 ## 아이의 수 컬럼명 sum_n = sum(n)
+
 babynames |> 
   group_by(year) |> 
   reframe(sum_n = sum(n))
@@ -28,9 +29,12 @@ babynames |>
 #2-1 1884년에 태어난 남자아이와 여자아이의 수는 몇명인가? ----
 
 
-#3 
-factor(baby_1groupby$sex) |> 
-  fct_relevel(c('M', 'F')) -> baby_1groupby$sex
+
+#3  
+# bbc_style()
+
+(factor(baby_1groupby$sex) |> 
+  fct_relevel(c('M', 'F')) -> baby_1groupby$sex)
 
 baby_1groupby |> 
   ggplot(aes(x = year, y = sum)) +
