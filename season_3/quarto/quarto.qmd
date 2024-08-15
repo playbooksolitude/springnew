@@ -1,0 +1,55 @@
+---
+title: "quarto"
+format: html
+editor: visual
+---
+
+# Quarto
+
+Quarto는 RStudio에서 사용되는 통합 문서 도구로, R Markdown의 후속 버전입니다. 
+
+- Quarto는 R, Python, Julia 등 다양한 프로그래밍 언어를 활용하여 문서를 작성할 수 있습니다. 
+
+- 코드, 텍스트, 수식 등을 하나의 문서로 통합하여 문서화할 수 있습니다.
+
+ - Quarto의 주요 특징 중 하나는 다음과 같은 다양한 형식으로 문서를 출력할 수 있다는 점입니다:
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+
+```{r setup, message=FALSE}
+
+library(tidyverse)
+
+mpg
+
+```
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r c}
+
+library(dplyr)
+library(ggplot2)
+mpg 
+
+
+```
+
+library() 설치가 안돼있을 경우 error 발생
+
+{r ggradar}
+
+#library(ggradar) 설치가 안됐을 경우 error
+# Error in `library()`:
+# ! there is no package called 'ggradar'
+
+Quitting from lines 84-92 [unnamed-chunk-6] (babynames.qmd)
+Error in `ggradar()`:
+! could not find function "ggradar"
+Execution halted
+
+The echo: false option disables the printing of code (only output is displayed).
+
