@@ -14,21 +14,19 @@ When you click the **Render** button a document will be generated that includes 
 
 ```{r setup, message=FALSE, warning=FALSE}
 
-
 library(tidyverse)
 library(babynames)
+#remotes::install_github("ricardo-bion/ggradar")
 library(ggradar)
+library(GGally)
 
 ```
 
 You can add options to executable code like this
 
-```{r }
-#| echo: false
-2 * 2
-```
+## #\| 옵션
 
-The `echo: false` option disables the printing of code (only output is displayed).
+-   {r } 청크 바로 밑에 작성
 
 ```{r }
 #| echo: false
@@ -43,6 +41,7 @@ mpg |>
 
 ```{r}
 
+#| echo: false
 mtcars |> 
   pairs()
 
