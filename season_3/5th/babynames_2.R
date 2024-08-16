@@ -8,10 +8,6 @@ babynames::babynames
 #
 librarians
 
-data()
-EuStockMarkets |> 
-  glimpse()
-
 #
 
 ChickWeight |> 
@@ -47,6 +43,11 @@ babynames |>
   geom_point()
 
 #
+babynames |> 
+  filter(year == 1909) |> with(n) |> sum()
+
+#
+babynames::babynames
 babynames::lifetables
 babynames::applicants
 babynames::births
@@ -82,3 +83,8 @@ vehicles |>
   ggplot(aes(x = hwy, y = cty)) +
   geom_point() +
   facet_grid(factor(cyl)~fuel)
+
+
+??Librarians
+library(fivethirtyeight)
+librarians
