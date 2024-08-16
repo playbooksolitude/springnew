@@ -45,7 +45,7 @@ babynames |>
 #2-1 1884년에 태어난 남자아이와 여자아이의 수는 몇명인가? ----
 
 
-<<<<<<< HEAD:season_3/5th/babyname_groupby.R
+
 
 #3  
 # bbc_style()
@@ -154,4 +154,6 @@ colSums(is.na(starwars)) |>
   as_tibble(rownames = "col")
 
 is.na(babynames) |> sum()
+
+
 

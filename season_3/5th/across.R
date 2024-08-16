@@ -18,16 +18,22 @@ df %>%
   str()
 
 #
-(df <- data.frame(
+(df_1 <- data.frame(
   group = c("A", "A", "B", "B"),
   var1 = c(1, 2, 3, 4),
   var2 = c(5, 6, 7, 8)))
 
 # across()를 사용하여 여러 열의 합계를 계산
-(summary_df <- df %>%
+(summary_df <- df_1 %>%
   group_by(group) %>%
   summarise(across(c(var1, var2), sum, na.rm = TRUE)))
 
 #
-df |> 
+df_1 |> 
   reframe(across(c(var1, var2), sum))
+
+#
+df_1 |> 
+  group_by(group) |> 
+  reframe(across(c(var1, var2),sum))
+  
