@@ -1,0 +1,270 @@
+---
+title: "03.mtcars & mpg"
+format: html
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r setup, message=FALSE, warning=FALSE}
+
+library(tidyverse)
+library(gt)
+#remotes::install_github("ricardo-bion/ggradar")
+library(ggradar)
+library(GGally)
+
+```
+
+You can add options to executable code like this
+
+## count()
+
+> 일반 조회
+
+```{r}
+
+mpg |> 
+  count(drv, class)
+
+```
+
+## gt()
+
+> 테이블 조회
+
+```{r }
+#| warning: false
+
+
+mpg |> 
+  count(drv, class) |> 
+  pivot_wider(names_from = drv, values_from = n) |> 
+  gt() |> 
+  tab_header(title = 'MPG', subtitle = 'drv * class 면분할')
+
+```
+
+## pairs()
+
+> mtcars
+>
+> 연속형 변수의 산포 (흩어짐 정도를 훓어보기)
+
+```{r}
+
+mtcars |> 
+  pairs()
+
+```
+
+## pairs()
+
+> iris
+>
+> color 추가
+
+```{r}
+
+iris |> 
+  pairs(panel = panel.smooth, 
+        col = iris$Species)
+
+```
+
+## ggpairs
+
+```{r}
+
+iris |> 
+  GGally::ggpairs(aes(colour = Species))
+
+```
+
+## ggradar
+
+```{r}
+
+mtcars |> 
+  rownames_to_column(var = 'cars') |>
+  mutate_at(vars(-cars), scales::rescale) |> 
+  tail(2) |> 
+  select(1:8) |> 
+  ggradar::ggradar()
+
+
+#check
+mtcars |> 
+  rownames_to_column('cars') |> 
+  filter(cars %in% c("Maserati Bora", 'Volvo 142E'))
+
+
+```
+
+### MPG cty \~ hwy
+
+> 도시연비(cty)가 증가할수록 고속도로 연비(hwy)가 증가
+
+```{r warning=FALSE}
+
+ggplot() +
+  geom_point(data = mpg, 
+       aes(x = cty, y = hwy), 
+       color = 'grey') +
+  geom_point(data = mpg |> 
+               filter(drv == 'f'), 
+       aes(x = cty, y = hwy), 
+       color = 'red') 
+
+```
+
+## MPG facet_wrap()
+
+```{r}
+
+ggplot() +
+  geom_point(data = mpg, 
+       aes(x = cty, y = hwy), 
+       color = 'grey') +
+  geom_point(data = mpg |> 
+               filter(drv == 'f'), 
+       aes(x = cty, y = hwy), 
+       color = 'red') +
+  facet_wrap(.~drv)
+  
+```
+
+### MPG cty \~ hwy
+
+> trans %in% c('manual(m5)', 'manual(m6)')
+>
+> drv \~ cyl
+
+```{r}
+mpg |> filter(trans == 'manual(m6)')
+ggplot() + 
+  geom_point(data = mpg, 
+             aes(x = cty, y = hwy),
+             color = 'grey') +
+  geom_point(data = mpg |> 
+               filter(trans %in% c('manual(m5)', 'manual(m6)')),
+             aes(x = cty, y = hwy),
+             color = 'red') +
+  facet_grid(cyl~drv) +
+  geom_vline(xintercept = 22.5, color = 'grey')
+ 
+
+
+```
+
+## 
+
+```{r}
+mpg |> 
+count(drv, trans) |> 
+  ggplot(aes(x = drv, y = trans, fill = n)) +
+  geom_tile() +
+  geom_text(aes(label = n), color = 'white') +
+  theme_minimal()
+  
+
+```
+
+### GGally::ggcorr()
+
+> 상관계수도 자동으로 계산
+
+```{r}
+#| warning: false
+
+mpg
+GGally::ggcorr(mpg[,c(3,4,5,8,9)], label = T)
+
+ggcorr(mtcars, 
+       nbreaks = 5, 
+       label = TRUE, 
+       label_round = 1, 
+       label_alpha = TRUE)
+```
+
+### library(ggcorrplot)
+
+> 상관계수를 구한 후 ggcorrplot 실행
+
+```{r}
+#| message: false
+
+if(!require(devtools)) install.packages("devtools")
+devtools::install_github("kassambara/ggcorrplot")
+library(ggcorrplot)
+
+
+```
+
+```{r}
+
+corr <- round(cor(mtcars), 1)
+ggcorrplot(corr,
+           hc.order = F,
+           type = "lower",
+           lab = T,
+           outline.color = "white")
+
+```
+
+## 대한민국을검색하는 방법
+
+### str_match() & str_detect()
+
+> 대한민국의 영문 다양한 표기법
+>
+> > Republic of Korea (Google)
+> >
+> > South Korea (Wikipedia)
+> >
+> > Korea, Rep. (Gap minder)
+> >
+> > KOR (IOC)
+> >
+> > Korea Republic (FIFA)
+
+```{r}
+
+library(gapminder)
+gapminder
+
+```
+
+#### str_match
+
+```{r}
+
+str_match(gapminder$country, 'korea') |> head()
+!is.na(str_match(gapminder$country, 'orea')) |> head()
+sum(!is.na(str_match(gapminder$country, 'orea')))
+
+```
+
+#### str_detect
+
+```{r}
+
+str_detect(gapminder$country, 'orea') |> sum()
+
+
+```
+
+### filter & str_detect
+
+```{r}
+
+gapminder |> 
+  filter(str_detect(gapminder$country, 'orea') > 0) 
+
+```
