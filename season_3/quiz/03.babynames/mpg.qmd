@@ -211,7 +211,7 @@ library(ggcorrplot)
 
 corr <- round(cor(mtcars), 1)
 ggcorrplot(corr,
-           hc.order = F,
+           hc.order = T,
            type = "lower",
            lab = T,
            outline.color = "white")
