@@ -108,66 +108,74 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#remotes::install_github("ricardo-bion/ggradar")</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggradar)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GGally)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GGally)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bbplot)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(babynames)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>You can add options to executable code like this</p>
 </section>
-<section id="count" class="level2">
-<h2 class="anchored" data-anchor-id="count">count()</h2>
-<blockquote class="blockquote">
-<p>일반 조회</p>
-</blockquote>
+<section id="babynames" class="level2">
+<h2 class="anchored" data-anchor-id="babynames">babynames</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">|&gt;</span> </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(drv, class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 12 × 3
-   drv   class          n
-   &lt;chr&gt; &lt;chr&gt;      &lt;int&gt;
- 1 4     compact       12
- 2 4     midsize        3
- 3 4     pickup        33
- 4 4     subcompact     4
- 5 4     suv           51
- 6 f     compact       35
- 7 f     midsize       38
- 8 f     minivan       11
- 9 f     subcompact    22
-10 r     2seater        5
-11 r     subcompact     9
-12 r     suv           11</code></pre>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>babynames <span class="sc">|&gt;</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year, sex) <span class="sc">|&gt;</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">reframe</span>(<span class="at">sum =</span> <span class="fu">sum</span>(n)) <span class="ot">-&gt;</span> baby_1groupby</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">factor</span>(baby_1groupby<span class="sc">$</span>sex) <span class="sc">|&gt;</span> </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fct_relevel</span>(<span class="fu">c</span>(<span class="st">'F'</span>, <span class="st">'M'</span>)) <span class="ot">-&gt;</span> baby_1groupby<span class="sc">$</span>sex</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>baby_1groupby <span class="sc">|&gt;</span> </span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> sum)) <span class="sc">+</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">color =</span> sex), <span class="at">size =</span> .<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="at">alpha =</span> .<span class="dv">5</span>, <span class="at">position =</span> <span class="st">'identity'</span>, </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">fill =</span> sex)) <span class="sc">+</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bbc_style</span>() <span class="sc">+</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="at">label =</span> <span class="st">'records of baby names'</span>) <span class="sc">+</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">22</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="mpg_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
-<section id="gt" class="level2">
-<h2 class="anchored" data-anchor-id="gt">gt()</h2>
+<section id="연도별-성별-비율" class="level2">
+<h2 class="anchored" data-anchor-id="연도별-성별-비율">연도별 성별 비율</h2>
 <blockquote class="blockquote">
-<p>테이블 조회</p>
+<p>rowwise()</p>
 </blockquote>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">|&gt;</span> </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(drv, class) <span class="sc">|&gt;</span> </span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> drv, <span class="at">values_from =</span> n) <span class="sc">|&gt;</span> </span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">'MPG'</span>, <span class="at">subtitle =</span> <span class="st">'drv * class 면분할'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>babynames <span class="sc">|&gt;</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year, sex) <span class="sc">|&gt;</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">reframe</span>(<span class="at">sum =</span> <span class="fu">sum</span>(n)) <span class="sc">|&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> sex, <span class="at">values_from =</span> sum) <span class="sc">|&gt;</span> </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sum =</span> <span class="fu">sum</span>(F,M),</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">prop_f =</span> <span class="fu">round</span>(F<span class="sc">/</span>sum,<span class="dv">2</span>), </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">prop_m =</span> <span class="fu">round</span>(M<span class="sc">/</span>sum,<span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">%%</span> <span class="dv">10</span> <span class="sc">==</span> <span class="dv">0</span> ) <span class="sc">|&gt;</span> </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="owycnckndh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#owycnckndh table {
+<div id="ltjpgblkor" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ltjpgblkor table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#owycnckndh thead, #owycnckndh tbody, #owycnckndh tfoot, #owycnckndh tr, #owycnckndh td, #owycnckndh th {
+#ltjpgblkor thead, #ltjpgblkor tbody, #ltjpgblkor tfoot, #ltjpgblkor tr, #ltjpgblkor td, #ltjpgblkor th {
   border-style: none;
 }
 
-#owycnckndh p {
+#ltjpgblkor p {
   margin: 0;
   padding: 0;
 }
 
-#owycnckndh .gt_table {
+#ltjpgblkor .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -193,12 +201,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#owycnckndh .gt_caption {
+#ltjpgblkor .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#owycnckndh .gt_title {
+#ltjpgblkor .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -210,7 +218,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#owycnckndh .gt_subtitle {
+#ltjpgblkor .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -222,7 +230,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#owycnckndh .gt_heading {
+#ltjpgblkor .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -234,13 +242,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#owycnckndh .gt_bottom_border {
+#ltjpgblkor .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#owycnckndh .gt_col_headings {
+#ltjpgblkor .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -255,7 +263,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#owycnckndh .gt_col_heading {
+#ltjpgblkor .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -275,7 +283,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#owycnckndh .gt_column_spanner_outer {
+#ltjpgblkor .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -287,15 +295,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#owycnckndh .gt_column_spanner_outer:first-child {
+#ltjpgblkor .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#owycnckndh .gt_column_spanner_outer:last-child {
+#ltjpgblkor .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#owycnckndh .gt_column_spanner {
+#ltjpgblkor .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -307,11 +315,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#owycnckndh .gt_spanner_row {
+#ltjpgblkor .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#owycnckndh .gt_group_heading {
+#ltjpgblkor .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -337,7 +345,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#owycnckndh .gt_empty_group_heading {
+#ltjpgblkor .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -352,15 +360,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#owycnckndh .gt_from_md > :first-child {
+#ltjpgblkor .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#owycnckndh .gt_from_md > :last-child {
+#ltjpgblkor .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#owycnckndh .gt_row {
+#ltjpgblkor .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -379,7 +387,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#owycnckndh .gt_stub {
+#ltjpgblkor .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -392,7 +400,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#owycnckndh .gt_stub_row_group {
+#ltjpgblkor .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -406,15 +414,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#owycnckndh .gt_row_group_first td {
+#ltjpgblkor .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#owycnckndh .gt_row_group_first th {
+#ltjpgblkor .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#owycnckndh .gt_summary_row {
+#ltjpgblkor .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -424,16 +432,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#owycnckndh .gt_first_summary_row {
+#ltjpgblkor .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#owycnckndh .gt_first_summary_row.thick {
+#ltjpgblkor .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#owycnckndh .gt_last_summary_row {
+#ltjpgblkor .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -443,7 +451,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#owycnckndh .gt_grand_summary_row {
+#ltjpgblkor .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -453,7 +461,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#owycnckndh .gt_first_grand_summary_row {
+#ltjpgblkor .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -463,7 +471,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#owycnckndh .gt_last_grand_summary_row_top {
+#ltjpgblkor .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -473,11 +481,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#owycnckndh .gt_striped {
+#ltjpgblkor .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#owycnckndh .gt_table_body {
+#ltjpgblkor .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -486,7 +494,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#owycnckndh .gt_footnotes {
+#ltjpgblkor .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -500,7 +508,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#owycnckndh .gt_footnote {
+#ltjpgblkor .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -509,7 +517,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#owycnckndh .gt_sourcenotes {
+#ltjpgblkor .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -523,7 +531,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#owycnckndh .gt_sourcenote {
+#ltjpgblkor .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -531,63 +539,696 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#owycnckndh .gt_left {
+#ltjpgblkor .gt_left {
   text-align: left;
 }
 
-#owycnckndh .gt_center {
+#ltjpgblkor .gt_center {
   text-align: center;
 }
 
-#owycnckndh .gt_right {
+#ltjpgblkor .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#owycnckndh .gt_font_normal {
+#ltjpgblkor .gt_font_normal {
   font-weight: normal;
 }
 
-#owycnckndh .gt_font_bold {
+#ltjpgblkor .gt_font_bold {
   font-weight: bold;
 }
 
-#owycnckndh .gt_font_italic {
+#ltjpgblkor .gt_font_italic {
   font-style: italic;
 }
 
-#owycnckndh .gt_super {
+#ltjpgblkor .gt_super {
   font-size: 65%;
 }
 
-#owycnckndh .gt_footnote_marks {
+#ltjpgblkor .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#owycnckndh .gt_asterisk {
+#ltjpgblkor .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#owycnckndh .gt_indent_1 {
+#ltjpgblkor .gt_indent_1 {
   text-indent: 5px;
 }
 
-#owycnckndh .gt_indent_2 {
+#ltjpgblkor .gt_indent_2 {
   text-indent: 10px;
 }
 
-#owycnckndh .gt_indent_3 {
+#ltjpgblkor .gt_indent_3 {
   text-indent: 15px;
 }
 
-#owycnckndh .gt_indent_4 {
+#ltjpgblkor .gt_indent_4 {
   text-indent: 20px;
 }
 
-#owycnckndh .gt_indent_5 {
+#ltjpgblkor .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_col_headings">
+<th id="year" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">year</th>
+<th id="F" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">F</th>
+<th id="M" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">M</th>
+<th id="sum" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">sum</th>
+<th id="prop_f" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">prop_f</th>
+<th id="prop_m" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">prop_m</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_right" headers="year">1880</td>
+<td class="gt_row gt_right" headers="F">90993</td>
+<td class="gt_row gt_right" headers="M">110491</td>
+<td class="gt_row gt_right" headers="sum">201484</td>
+<td class="gt_row gt_right" headers="prop_f">0.45</td>
+<td class="gt_row gt_right" headers="prop_m">0.55</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="year">1890</td>
+<td class="gt_row gt_right" headers="F">190376</td>
+<td class="gt_row gt_right" headers="M">111025</td>
+<td class="gt_row gt_right" headers="sum">301401</td>
+<td class="gt_row gt_right" headers="prop_f">0.63</td>
+<td class="gt_row gt_right" headers="prop_m">0.37</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="year">1900</td>
+<td class="gt_row gt_right" headers="F">299800</td>
+<td class="gt_row gt_right" headers="M">150483</td>
+<td class="gt_row gt_right" headers="sum">450283</td>
+<td class="gt_row gt_right" headers="prop_f">0.67</td>
+<td class="gt_row gt_right" headers="prop_m">0.33</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="year">1910</td>
+<td class="gt_row gt_right" headers="F">396502</td>
+<td class="gt_row gt_right" headers="M">194213</td>
+<td class="gt_row gt_right" headers="sum">590715</td>
+<td class="gt_row gt_right" headers="prop_f">0.67</td>
+<td class="gt_row gt_right" headers="prop_m">0.33</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="year">1920</td>
+<td class="gt_row gt_right" headers="F">1198290</td>
+<td class="gt_row gt_right" headers="M">1064391</td>
+<td class="gt_row gt_right" headers="sum">2262681</td>
+<td class="gt_row gt_right" headers="prop_f">0.53</td>
+<td class="gt_row gt_right" headers="prop_m">0.47</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="year">1930</td>
+<td class="gt_row gt_right" headers="F">1125885</td>
+<td class="gt_row gt_right" headers="M">1097274</td>
+<td class="gt_row gt_right" headers="sum">2223159</td>
+<td class="gt_row gt_right" headers="prop_f">0.51</td>
+<td class="gt_row gt_right" headers="prop_m">0.49</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="year">1940</td>
+<td class="gt_row gt_right" headers="F">1143393</td>
+<td class="gt_row gt_right" headers="M">1158985</td>
+<td class="gt_row gt_right" headers="sum">2302378</td>
+<td class="gt_row gt_right" headers="prop_f">0.50</td>
+<td class="gt_row gt_right" headers="prop_m">0.50</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="year">1950</td>
+<td class="gt_row gt_right" headers="F">1713151</td>
+<td class="gt_row gt_right" headers="M">1790549</td>
+<td class="gt_row gt_right" headers="sum">3503700</td>
+<td class="gt_row gt_right" headers="prop_f">0.49</td>
+<td class="gt_row gt_right" headers="prop_m">0.51</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="year">1960</td>
+<td class="gt_row gt_right" headers="F">2022018</td>
+<td class="gt_row gt_right" headers="M">2132359</td>
+<td class="gt_row gt_right" headers="sum">4154377</td>
+<td class="gt_row gt_right" headers="prop_f">0.49</td>
+<td class="gt_row gt_right" headers="prop_m">0.51</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="year">1970</td>
+<td class="gt_row gt_right" headers="F">1748175</td>
+<td class="gt_row gt_right" headers="M">1859245</td>
+<td class="gt_row gt_right" headers="sum">3607420</td>
+<td class="gt_row gt_right" headers="prop_f">0.48</td>
+<td class="gt_row gt_right" headers="prop_m">0.52</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="year">1980</td>
+<td class="gt_row gt_right" headers="F">1660147</td>
+<td class="gt_row gt_right" headers="M">1784390</td>
+<td class="gt_row gt_right" headers="sum">3444537</td>
+<td class="gt_row gt_right" headers="prop_f">0.48</td>
+<td class="gt_row gt_right" headers="prop_m">0.52</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="year">1990</td>
+<td class="gt_row gt_right" headers="F">1898046</td>
+<td class="gt_row gt_right" headers="M">2052946</td>
+<td class="gt_row gt_right" headers="sum">3950992</td>
+<td class="gt_row gt_right" headers="prop_f">0.48</td>
+<td class="gt_row gt_right" headers="prop_m">0.52</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="year">2000</td>
+<td class="gt_row gt_right" headers="F">1815110</td>
+<td class="gt_row gt_right" headers="M">1962969</td>
+<td class="gt_row gt_right" headers="sum">3778079</td>
+<td class="gt_row gt_right" headers="prop_f">0.48</td>
+<td class="gt_row gt_right" headers="prop_m">0.52</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="year">2010</td>
+<td class="gt_row gt_right" headers="F">1774758</td>
+<td class="gt_row gt_right" headers="M">1915942</td>
+<td class="gt_row gt_right" headers="sum">3690700</td>
+<td class="gt_row gt_right" headers="prop_f">0.48</td>
+<td class="gt_row gt_right" headers="prop_m">0.52</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="성별-이름-글자수-변화" class="level2">
+<h2 class="anchored" data-anchor-id="성별-이름-글자수-변화">성별 이름 글자수 변화</h2>
+<blockquote class="blockquote">
+<p>str_char()</p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>babynames <span class="sc">|&gt;</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#filter(year == 2010) |&gt; </span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">name_char =</span> <span class="fu">nchar</span>(name)) <span class="sc">|&gt;</span> </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year, sex) <span class="sc">|&gt;</span> </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">reframe</span>(<span class="at">mean_char =</span> <span class="fu">mean</span>(name_char)) <span class="sc">|&gt;</span> </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> mean_char, <span class="at">color =</span> sex)) <span class="sc">+</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="mpg_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="count" class="level2">
+<h2 class="anchored" data-anchor-id="count">count()</h2>
+<blockquote class="blockquote">
+<p>일반 조회</p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">|&gt;</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(drv, class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 3
+   drv   class          n
+   &lt;chr&gt; &lt;chr&gt;      &lt;int&gt;
+ 1 4     compact       12
+ 2 4     midsize        3
+ 3 4     pickup        33
+ 4 4     subcompact     4
+ 5 4     suv           51
+ 6 f     compact       35
+ 7 f     midsize       38
+ 8 f     minivan       11
+ 9 f     subcompact    22
+10 r     2seater        5
+11 r     subcompact     9
+12 r     suv           11</code></pre>
+</div>
+</div>
+</section>
+<section id="gt" class="level2">
+<h2 class="anchored" data-anchor-id="gt">gt()</h2>
+<blockquote class="blockquote">
+<p>테이블 조회</p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">|&gt;</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(drv, class) <span class="sc">|&gt;</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> drv, <span class="at">values_from =</span> n) <span class="sc">|&gt;</span> </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">'MPG'</span>, <span class="at">subtitle =</span> <span class="st">'drv * class 면분할'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="vwjwcpuaon" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#vwjwcpuaon table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#vwjwcpuaon thead, #vwjwcpuaon tbody, #vwjwcpuaon tfoot, #vwjwcpuaon tr, #vwjwcpuaon td, #vwjwcpuaon th {
+  border-style: none;
+}
+
+#vwjwcpuaon p {
+  margin: 0;
+  padding: 0;
+}
+
+#vwjwcpuaon .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#vwjwcpuaon .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#vwjwcpuaon .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#vwjwcpuaon .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#vwjwcpuaon .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vwjwcpuaon .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vwjwcpuaon .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vwjwcpuaon .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#vwjwcpuaon .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#vwjwcpuaon .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#vwjwcpuaon .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#vwjwcpuaon .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#vwjwcpuaon .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#vwjwcpuaon .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#vwjwcpuaon .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#vwjwcpuaon .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#vwjwcpuaon .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#vwjwcpuaon .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#vwjwcpuaon .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vwjwcpuaon .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#vwjwcpuaon .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#vwjwcpuaon .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#vwjwcpuaon .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vwjwcpuaon .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#vwjwcpuaon .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#vwjwcpuaon .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vwjwcpuaon .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vwjwcpuaon .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#vwjwcpuaon .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vwjwcpuaon .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#vwjwcpuaon .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vwjwcpuaon .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vwjwcpuaon .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vwjwcpuaon .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vwjwcpuaon .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vwjwcpuaon .gt_left {
+  text-align: left;
+}
+
+#vwjwcpuaon .gt_center {
+  text-align: center;
+}
+
+#vwjwcpuaon .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#vwjwcpuaon .gt_font_normal {
+  font-weight: normal;
+}
+
+#vwjwcpuaon .gt_font_bold {
+  font-weight: bold;
+}
+
+#vwjwcpuaon .gt_font_italic {
+  font-style: italic;
+}
+
+#vwjwcpuaon .gt_super {
+  font-size: 65%;
+}
+
+#vwjwcpuaon .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#vwjwcpuaon .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#vwjwcpuaon .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#vwjwcpuaon .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#vwjwcpuaon .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#vwjwcpuaon .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#vwjwcpuaon .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -664,12 +1305,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>연속형 변수의 산포 (흩어짐 정도를 훓어보기)</p>
 </blockquote>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">|&gt;</span> </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pairs</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">|&gt;</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pairs</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="mpg_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="mpg_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -682,13 +1323,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>color 추가</p>
 </blockquote>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">|&gt;</span> </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pairs</span>(<span class="at">panel =</span> panel.smooth, </span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> iris<span class="sc">$</span>Species)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">|&gt;</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pairs</span>(<span class="at">panel =</span> panel.smooth, </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> iris<span class="sc">$</span>Species)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="mpg_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="mpg_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -697,8 +1338,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="ggpairs" class="level2">
 <h2 class="anchored" data-anchor-id="ggpairs">ggpairs</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">|&gt;</span> </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  GGally<span class="sc">::</span><span class="fu">ggpairs</span>(<span class="fu">aes</span>(<span class="at">colour =</span> Species))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">|&gt;</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  GGally<span class="sc">::</span><span class="fu">ggpairs</span>(<span class="fu">aes</span>(<span class="at">colour =</span> Species))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
@@ -708,7 +1349,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="mpg_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="mpg_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -717,23 +1358,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="ggradar" class="level2">
 <h2 class="anchored" data-anchor-id="ggradar">ggradar</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">|&gt;</span> </span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">'cars'</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(<span class="sc">-</span>cars), scales<span class="sc">::</span>rescale) <span class="sc">|&gt;</span> </span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tail</span>(<span class="dv">2</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  ggradar<span class="sc">::</span><span class="fu">ggradar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">|&gt;</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">'cars'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(<span class="sc">-</span>cars), scales<span class="sc">::</span>rescale) <span class="sc">|&gt;</span> </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tail</span>(<span class="dv">2</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  ggradar<span class="sc">::</span><span class="fu">ggradar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="mpg_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="mpg_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">|&gt;</span> </span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">'cars'</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(cars <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Maserati Bora"</span>, <span class="st">'Volvo 142E'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">|&gt;</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">'cars'</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(cars <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Maserati Bora"</span>, <span class="st">'Volvo 142E'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           cars  mpg cyl disp  hp drat   wt qsec vs am gear carb
 1 Maserati Bora 15.0   8  301 335 3.54 3.57 14.6  0  1    5    8
@@ -746,18 +1387,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>도시연비(cty)가 증가할수록 고속도로 연비(hwy)가 증가</p>
 </blockquote>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> mpg, </span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> cty, <span class="at">y =</span> hwy), </span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">'grey'</span>) <span class="sc">+</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> mpg <span class="sc">|&gt;</span> </span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>               <span class="fu">filter</span>(drv <span class="sc">==</span> <span class="st">'f'</span>), </span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> cty, <span class="at">y =</span> hwy), </span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">'red'</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> mpg, </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> cty, <span class="at">y =</span> hwy), </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">'grey'</span>) <span class="sc">+</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> mpg <span class="sc">|&gt;</span> </span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>               <span class="fu">filter</span>(drv <span class="sc">==</span> <span class="st">'f'</span>), </span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> cty, <span class="at">y =</span> hwy), </span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">'red'</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="mpg_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="mpg_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -767,19 +1408,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="mpg-facet_wrap" class="level2">
 <h2 class="anchored" data-anchor-id="mpg-facet_wrap">MPG facet_wrap()</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> mpg, </span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> cty, <span class="at">y =</span> hwy), </span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">'grey'</span>) <span class="sc">+</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> mpg <span class="sc">|&gt;</span> </span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>               <span class="fu">filter</span>(drv <span class="sc">==</span> <span class="st">'f'</span>), </span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> cty, <span class="at">y =</span> hwy), </span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">'red'</span>) <span class="sc">+</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(.<span class="sc">~</span>drv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> mpg, </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> cty, <span class="at">y =</span> hwy), </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">'grey'</span>) <span class="sc">+</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> mpg <span class="sc">|&gt;</span> </span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>               <span class="fu">filter</span>(drv <span class="sc">==</span> <span class="st">'f'</span>), </span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> cty, <span class="at">y =</span> hwy), </span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">'red'</span>) <span class="sc">+</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(.<span class="sc">~</span>drv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="mpg_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="mpg_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -791,7 +1432,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>drv ~ cyl</p>
 </blockquote>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">|&gt;</span> <span class="fu">filter</span>(trans <span class="sc">==</span> <span class="st">'manual(m6)'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">|&gt;</span> <span class="fu">filter</span>(trans <span class="sc">==</span> <span class="st">'manual(m6)'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 19 × 11
    manufacturer model      displ  year   cyl trans drv     cty   hwy fl    class
@@ -816,20 +1457,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 18 volkswagen   jetta        2    2008     4 manu… f        21    29 p     comp…
 19 volkswagen   passat       2    2008     4 manu… f        21    29 p     mids…</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> mpg, </span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> cty, <span class="at">y =</span> hwy),</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">'grey'</span>) <span class="sc">+</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> mpg <span class="sc">|&gt;</span> </span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>               <span class="fu">filter</span>(trans <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'manual(m5)'</span>, <span class="st">'manual(m6)'</span>)),</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> cty, <span class="at">y =</span> hwy),</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">'red'</span>) <span class="sc">+</span></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(cyl<span class="sc">~</span>drv) <span class="sc">+</span></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fl">22.5</span>, <span class="at">color =</span> <span class="st">'grey'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> mpg, </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> cty, <span class="at">y =</span> hwy),</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">'grey'</span>) <span class="sc">+</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> mpg <span class="sc">|&gt;</span> </span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>               <span class="fu">filter</span>(trans <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'manual(m5)'</span>, <span class="st">'manual(m6)'</span>)),</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> cty, <span class="at">y =</span> hwy),</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">'red'</span>) <span class="sc">+</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(cyl<span class="sc">~</span>drv) <span class="sc">+</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fl">22.5</span>, <span class="at">color =</span> <span class="st">'grey'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="mpg_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="mpg_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -839,16 +1480,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="section" class="level2">
 <h2 class="anchored" data-anchor-id="section"></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">|&gt;</span> </span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(drv, trans) <span class="sc">|&gt;</span> </span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> drv, <span class="at">y =</span> trans, <span class="at">fill =</span> n)) <span class="sc">+</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>() <span class="sc">+</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> n), <span class="at">color =</span> <span class="st">'white'</span>) <span class="sc">+</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">|&gt;</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(drv, trans) <span class="sc">|&gt;</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> drv, <span class="at">y =</span> trans, <span class="at">fill =</span> n)) <span class="sc">+</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>() <span class="sc">+</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> n), <span class="at">color =</span> <span class="st">'white'</span>) <span class="sc">+</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="mpg_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="mpg_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -859,7 +1500,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>상관계수도 자동으로 계산</p>
 </blockquote>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>mpg</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>mpg</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 234 × 11
    manufacturer model      displ  year   cyl trans drv     cty   hwy fl    class
@@ -876,23 +1517,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 10 audi         a4 quattro   2    2008     4 manu… 4        20    28 p     comp…
 # ℹ 224 more rows</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>GGally<span class="sc">::</span><span class="fu">ggcorr</span>(mpg[,<span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">8</span>,<span class="dv">9</span>)], <span class="at">label =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>GGally<span class="sc">::</span><span class="fu">ggcorr</span>(mpg[,<span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">8</span>,<span class="dv">9</span>)], <span class="at">label =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="mpg_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="mpg_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggcorr</span>(mtcars, </span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">nbreaks =</span> <span class="dv">5</span>, </span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">label =</span> <span class="cn">TRUE</span>, </span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">label_round =</span> <span class="dv">1</span>, </span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">label_alpha =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggcorr</span>(mtcars, </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">nbreaks =</span> <span class="dv">5</span>, </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">label =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">label_round =</span> <span class="dv">1</span>, </span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">label_alpha =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="mpg_files/figure-html/unnamed-chunk-11-2.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="mpg_files/figure-html/unnamed-chunk-14-2.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -904,21 +1545,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>상관계수를 구한 후 ggcorrplot 실행</p>
 </blockquote>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(devtools)) <span class="fu">install.packages</span>(<span class="st">"devtools"</span>)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"kassambara/ggcorrplot"</span>)</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggcorrplot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(devtools)) <span class="fu">install.packages</span>(<span class="st">"devtools"</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"kassambara/ggcorrplot"</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggcorrplot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>corr <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">cor</span>(mtcars), <span class="dv">1</span>)</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggcorrplot</span>(corr,</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">hc.order =</span> T,</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">type =</span> <span class="st">"lower"</span>,</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">lab =</span> T,</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">outline.color =</span> <span class="st">"white"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>corr <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">cor</span>(mtcars), <span class="dv">1</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggcorrplot</span>(corr,</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">hc.order =</span> T,</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">type =</span> <span class="st">"lower"</span>,</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">lab =</span> T,</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">outline.color =</span> <span class="st">"white"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="mpg_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="mpg_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -940,8 +1581,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </blockquote>
 </blockquote>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gapminder)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>gapminder</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gapminder)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>gapminder</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1,704 × 6
    country     continent  year lifeExp      pop gdpPercap
@@ -962,7 +1603,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="str_match" class="level4">
 <h4 class="anchored" data-anchor-id="str_match">str_match</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_match</span>(gapminder<span class="sc">$</span>country, <span class="st">'korea'</span>) <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_match</span>(gapminder<span class="sc">$</span>country, <span class="st">'korea'</span>) <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1]
 [1,] NA  
@@ -972,7 +1613,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 [5,] NA  
 [6,] NA  </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="sc">!</span><span class="fu">is.na</span>(<span class="fu">str_match</span>(gapminder<span class="sc">$</span>country, <span class="st">'orea'</span>)) <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="sc">!</span><span class="fu">is.na</span>(<span class="fu">str_match</span>(gapminder<span class="sc">$</span>country, <span class="st">'orea'</span>)) <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      [,1]
 [1,] FALSE
@@ -982,7 +1623,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 [5,] FALSE
 [6,] FALSE</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(<span class="fu">str_match</span>(gapminder<span class="sc">$</span>country, <span class="st">'orea'</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(<span class="fu">str_match</span>(gapminder<span class="sc">$</span>country, <span class="st">'orea'</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 24</code></pre>
 </div>
@@ -991,7 +1632,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="str_detect" class="level4">
 <h4 class="anchored" data-anchor-id="str_detect">str_detect</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_detect</span>(gapminder<span class="sc">$</span>country, <span class="st">'orea'</span>) <span class="sc">|&gt;</span> <span class="fu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_detect</span>(gapminder<span class="sc">$</span>country, <span class="st">'orea'</span>) <span class="sc">|&gt;</span> <span class="fu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 24</code></pre>
 </div>
@@ -1001,8 +1642,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="filter-str_detect" class="level3">
 <h3 class="anchored" data-anchor-id="filter-str_detect">filter &amp; str_detect</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>gapminder <span class="sc">|&gt;</span> </span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(gapminder<span class="sc">$</span>country, <span class="st">'orea'</span>) <span class="sc">&gt;</span> <span class="dv">0</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>gapminder <span class="sc">|&gt;</span> </span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(gapminder<span class="sc">$</span>country, <span class="st">'orea'</span>) <span class="sc">&gt;</span> <span class="dv">0</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 24 × 6
    country          continent  year lifeExp      pop gdpPercap

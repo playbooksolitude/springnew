@@ -19,10 +19,69 @@ library(gt)
 #remotes::install_github("ricardo-bion/ggradar")
 library(ggradar)
 library(GGally)
-
+library(bbplot)
+library(babynames)
 ```
 
 You can add options to executable code like this
+
+## babynames
+
+```{r, warning=FALSE}
+
+babynames |> 
+  group_by(year, sex) |> 
+  reframe(sum = sum(n)) -> baby_1groupby
+
+factor(baby_1groupby$sex) |> 
+  fct_relevel(c('F', 'M')) -> baby_1groupby$sex
+
+baby_1groupby |> 
+  ggplot(aes(x = year, y = sum)) +
+  geom_line(aes(color = sex), size = .5) +
+  geom_area(alpha = .5, position = 'identity', 
+            aes(fill = sex)) +
+  bbc_style() +
+  ggtitle(label = 'records of baby names') +
+  scale_y_continuous(labels = scales::comma) +
+  theme(plot.title = element_text(size = 22))
+
+```
+
+## 연도별 성별 비율
+
+> rowwise()
+
+```{r}
+
+babynames |> 
+  group_by(year, sex) |> 
+  reframe(sum = sum(n)) |>
+  pivot_wider(names_from = sex, values_from = sum) |> 
+  rowwise() |> 
+  mutate(sum = sum(F,M),
+    prop_f = round(F/sum,2), 
+    prop_m = round(M/sum,2)) |> 
+  filter(year %% 10 == 0 ) |> 
+  gt()
+```
+
+## 성별 이름 글자수 변화
+
+> str_char()
+
+```{r}
+
+babynames |> 
+  #filter(year == 2010) |> 
+  mutate(name_char = nchar(name)) |> 
+  group_by(year, sex) |> 
+  reframe(mean_char = mean(name_char)) |> 
+  ggplot(aes(x = year, y = mean_char, color = sex)) +
+  geom_point()
+  
+
+```
 
 ## count()
 

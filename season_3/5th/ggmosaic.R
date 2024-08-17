@@ -23,12 +23,21 @@ ggplot(data = mpg) +
 data()
 gapminder |> 
   ggplot() +
-  geom_mosaic(mapping = aes(product(continent, year), fill = continent))
+  geom_mosaic(mapping = aes(product(continent, year), 
+                            fill = continent))
+
+#
+starwars |> 
+  drop_na(sex, gender) |> 
+  ggplot() + 
+  geom_mosaic(aes(product(sex, gender), fill = sex))
+
 
 #
 diamonds |> 
   ggplot() +
-  geom_mosaic(mapping = aes(product(cut, color), fill = cut)) +
+  geom_mosaic(mapping = aes(product(cut, color), 
+                            fill = cut)) +
   facet_wrap(.~clarity)
 
 #
@@ -116,3 +125,4 @@ ggplot(data = titanic_data) +
   
   labs(title = "Titanic Survival by Class", x = "Class", y = "Count") +
   theme_minimal()
+
