@@ -15,12 +15,16 @@ ggplot(data = titanic) +
   geom_mosaic(aes(product(Class, Age), fill = Survived))
 
 mpg
+library(nord)
 ggplot(data = mpg) +
   geom_mosaic(aes(product(drv),fill = class)) +
-  facet_wrap(.~year)
+  facet_wrap(.~year) +
+  scale_fill_nord(palette = 'aurora') +
+  geom_mosaic_text(aes(product(class,drv)), size = 4) +
+  theme_minimal()
 
 #
-data()
+library(gapminder)
 gapminder |> 
   ggplot() +
   geom_mosaic(mapping = aes(product(continent, year), 
@@ -34,11 +38,15 @@ starwars |>
 
 
 #
+library(nord)
 diamonds |> 
   ggplot() +
-  geom_mosaic(mapping = aes(product(cut, color), 
-                            fill = cut)) +
-  facet_wrap(.~clarity)
+  geom_mosaic(mapping = aes(product(clarity, color), 
+                            fill = color)) +
+  facet_wrap(.~cut) +
+  scale_fill_nord(palette = 'aurora') +
+  theme(axis.text.x = element_blank(), 
+        axis.ticks.x = element_blank())
 
 #
 diamonds |> 

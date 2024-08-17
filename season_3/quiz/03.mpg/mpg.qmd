@@ -166,7 +166,7 @@ mtcars |>
 
 ```
 
-### MPG cty \~ hwy
+### MPG cty ~ hwy
 
 > 도시연비(cty)가 증가할수록 고속도로 연비(hwy)가 증가
 
@@ -199,11 +199,11 @@ ggplot() +
   
 ```
 
-### MPG cty \~ hwy
+### MPG cty ~ hwy
 
 > trans %in% c('manual(m5)', 'manual(m6)')
 >
-> drv \~ cyl
+> drv ~ cyl
 
 ```{r}
 mpg |> filter(trans == 'manual(m6)')
@@ -222,7 +222,7 @@ ggplot() +
 
 ```
 
-## 
+### geom_tile()
 
 ```{r}
 mpg |> 
@@ -234,6 +234,61 @@ count(drv, trans) |>
   
 
 ```
+
+### geom_ggmosaic()
+
+```{r}
+#| message: false
+
+if(!require(devtools)) install.packages("devtools")
+library(devtools)
+if(!require(ggmosaic)) install.packages("ggmosaic")
+library(ggmosaic)
+
+```
+
+
+#### starwars
+```{r}
+#| warning: false
+
+ggplot(data = titanic) +
+  geom_mosaic(aes(product(Class, Age), fill = Survived))
+
+```
+
+
+### nord()
+> color palette
+
+```{r}
+#| message: false
+
+if(!require(nord)) install.packages(nord)
+library(nord)
+
+ggplot(data = mpg) +
+  geom_mosaic(aes(product(drv),fill = class)) +
+  facet_wrap(.~year) +
+  scale_fill_nord(palette = 'aurora') +
+  geom_mosaic_text(aes(product(class,drv)), size = 3) +
+  theme_minimal()
+```
+
+#### diamonds
+```{r}
+#| warning: false
+
+diamonds |> 
+  ggplot() +
+  geom_mosaic(mapping = aes(product(clarity, color), 
+                            fill = color)) +
+  facet_wrap(.~cut) +
+  scale_fill_nord(palette = 'aurora') +
+  theme(axis.text.x = element_blank(), 
+        axis.ticks.x = element_blank())
+```
+
 
 ### GGally::ggcorr()
 
@@ -277,11 +332,11 @@ ggcorrplot(corr,
 
 ```
 
-## 대한민국을검색하는 방법
+## 대한민국을 검색하는 방법
 
 ### str_match() & str_detect()
 
-> 대한민국의 영문 다양한 표기법
+> 대한민국의 다양한 영문 표기법
 >
 > > Republic of Korea (Google)
 > >
