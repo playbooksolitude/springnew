@@ -155,3 +155,5 @@ colSums(is.na(starwars)) |>
 
 is.na(babynames) |> sum()
 
+
+

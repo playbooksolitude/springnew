@@ -3,13 +3,18 @@
 #
 library(tidyverse)
 data()
-?smiths
-library(tidyr)
 
-#내장 데이터 초기화
-smiths |> 
-  select(-time)
+data(package = .packages(all.available = TRUE))
 
+#내장 데이터 초기화 ----
+data("smiths")
+
+# 패키지 포함된 데이터셋 ----
+data("baseball")
+data(package = 'ggplot2')
+data(package = 'GGally')
+
+# 열 삭제 ----
 smiths$time <- NULL
 smiths
 smiths$age <- NULL
@@ -22,9 +27,26 @@ starwars |>
   filter(is.na(mass))
 
 #
-starwars |> 
-  drop_na(mass, height)
 
+#GGally ----
+library(GGally)
+GGally::baseball
+australia_PISA2012
+baseball
+flea
+happy
+nasa
+pigs
+psychademic
+tips
+twitter_spambots
+
+
+#
+
+
+
+#
 #평균 체중
 starwars |> 
   filter(is.na(mass))
