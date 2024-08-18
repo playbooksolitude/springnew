@@ -116,3 +116,74 @@ ggplot(data = mpg,
   facet_wrap(.~drv)
   
 ```
+
+```{r}
+#연도별 남녀수 및 성별 비율
+babynames |> 
+  group_by(year, sex) |> 
+  reframe(sum = sum(n)) |>
+  #reframe(sum = sum(n), n = n()) |> 
+  pivot_wider(names_from = sex, values_from = sum) |> 
+  rowwise() |> 
+  mutate(sum = sum(F,M),
+    prop_f = F/sum, 
+    prop_m = M/sum)
+
+```
+
+```{r}
+
+#연도별 성별 글자수
+babynames |> 
+  #filter(year == 2010) |> 
+  mutate(name_char = nchar(name)) |> 
+  group_by(year, sex) |> 
+  reframe(mean_char = mean(name_char)) |> 
+  ggplot(aes(x = year, y = mean_char, color = sex)) +
+  geom_point()
+```
+
+```{r}
+#1 연도별로 태어난 아이의 수를 구하시오 ---- 
+## group_by()
+## 아이의 수 컬럼명 sum_n = sum(n)
+
+babynames |> 
+  group_by(year) |> 
+  reframe(sum_n = sum(n))
+
+
+```
+
+```{r}
+#1-1 1884에 태어난 아이의 수는 몇명인가? ----
+
+# 최근 20년간 가장 많은 이름은?
+babynames |> 
+  group_by(name, year, sex) |> 
+  reframe(n = n()) -> babynames_1groupname
+
+```
+
+```{r}
+
+(babynames |> 
+  group_by(year, sex) |> 
+  reframe(sum = sum(n)) -> baby_1groupby)
+```
+
+```{r}
+
+# levels
+baby_1groupby |> 
+  ggplot(aes(x = year, y = sum)) +
+  geom_line(aes(color = sex), size = .5) +
+  geom_area(alpha = .5, position = 'identity', aes(fill = sex)) +
+  bbc_style() +
+  ggtitle(label = 'USA Babynames') +
+  scale_y_continuous(labels = scales::comma) #+
+  scale_fill_manual(values = c('M' = 'lightblue', 'F' = 'pink')) +
+  scale_color_manual(values = c('M' = 'lightblue', 'F' = 'pink'))
+
+
+```
