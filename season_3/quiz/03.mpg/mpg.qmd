@@ -1,0 +1,384 @@
+---
+title: "03.mtcars & mpg"
+format: html
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r setup, message=FALSE, warning=FALSE}
+
+library(tidyverse)
+library(gt)
+#remotes::install_github("ricardo-bion/ggradar")
+library(ggradar)
+library(GGally)
+library(bbplot)
+library(babynames)
+```
+
+You can add options to executable code like this
+
+## babynames
+
+```{r, warning=FALSE}
+
+babynames |> 
+  group_by(year, sex) |> 
+  reframe(sum = sum(n)) -> baby_1groupby
+
+factor(baby_1groupby$sex) |> 
+  fct_relevel(c('F', 'M')) -> baby_1groupby$sex
+
+baby_1groupby |> 
+  ggplot(aes(x = year, y = sum)) +
+  geom_line(aes(color = sex), size = .5) +
+  geom_area(alpha = .5, position = 'identity', 
+            aes(fill = sex)) +
+  bbc_style() +
+  ggtitle(label = 'records of baby names') +
+  scale_y_continuous(labels = scales::comma) +
+  theme(plot.title = element_text(size = 22))
+
+```
+
+## 연도별 성별 비율
+
+> rowwise()
+
+```{r}
+
+babynames |> 
+  group_by(year, sex) |> 
+  reframe(sum = sum(n)) |>
+  pivot_wider(names_from = sex, values_from = sum) |> 
+  rowwise() |> 
+  mutate(sum = sum(F,M),
+    prop_f = round(F/sum,2), 
+    prop_m = round(M/sum,2)) |> 
+  filter(year %% 10 == 0 ) |> 
+  gt()
+```
+
+## 성별 이름 글자수 변화
+
+> str_char()
+
+```{r}
+
+babynames |> 
+  #filter(year == 2010) |> 
+  mutate(name_char = nchar(name)) |> 
+  group_by(year, sex) |> 
+  reframe(mean_char = mean(name_char)) |> 
+  ggplot(aes(x = year, y = mean_char, color = sex)) +
+  geom_point()
+  
+
+```
+
+## count()
+
+> 일반 조회
+
+```{r}
+
+mpg |> 
+  count(drv, class)
+
+```
+
+## gt()
+
+> 테이블 조회
+
+```{r }
+#| warning: false
+
+
+mpg |> 
+  count(drv, class) |> 
+  pivot_wider(names_from = drv, values_from = n) |> 
+  gt() |> 
+  tab_header(title = 'MPG', subtitle = 'drv * class 면분할')
+
+```
+
+## pairs()
+
+> mtcars
+>
+> 연속형 변수의 산포 (흩어짐 정도를 훓어보기)
+
+```{r}
+
+mtcars |> 
+  pairs()
+
+```
+
+## pairs()
+
+> iris
+>
+> color 추가
+
+```{r}
+
+iris |> 
+  pairs(panel = panel.smooth, 
+        col = iris$Species)
+
+```
+
+## ggpairs
+
+```{r}
+
+iris |> 
+  GGally::ggpairs(aes(colour = Species))
+
+```
+
+## ggradar
+
+```{r}
+
+mtcars |> 
+  rownames_to_column(var = 'cars') |>
+  mutate_at(vars(-cars), scales::rescale) |> 
+  tail(2) |> 
+  select(1:8) |> 
+  ggradar::ggradar()
+
+
+#check
+mtcars |> 
+  rownames_to_column('cars') |> 
+  filter(cars %in% c("Maserati Bora", 'Volvo 142E'))
+
+
+```
+
+### MPG cty ~ hwy
+
+> 도시연비(cty)가 증가할수록 고속도로 연비(hwy)가 증가
+
+```{r warning=FALSE}
+
+ggplot() +
+  geom_point(data = mpg, 
+       aes(x = cty, y = hwy), 
+       color = 'grey') +
+  geom_point(data = mpg |> 
+               filter(drv == 'f'), 
+       aes(x = cty, y = hwy), 
+       color = 'red') 
+
+```
+
+## MPG facet_wrap()
+
+```{r}
+
+ggplot() +
+  geom_point(data = mpg, 
+       aes(x = cty, y = hwy), 
+       color = 'grey') +
+  geom_point(data = mpg |> 
+               filter(drv == 'f'), 
+       aes(x = cty, y = hwy), 
+       color = 'red') +
+  facet_wrap(.~drv)
+  
+```
+
+### MPG cty ~ hwy
+
+> trans %in% c('manual(m5)', 'manual(m6)')
+>
+> drv ~ cyl
+
+```{r}
+mpg |> filter(trans == 'manual(m6)')
+ggplot() + 
+  geom_point(data = mpg, 
+             aes(x = cty, y = hwy),
+             color = 'grey') +
+  geom_point(data = mpg |> 
+               filter(trans %in% c('manual(m5)', 'manual(m6)')),
+             aes(x = cty, y = hwy),
+             color = 'red') +
+  facet_grid(cyl~drv) +
+  geom_vline(xintercept = 22.5, color = 'grey')
+ 
+
+
+```
+
+### geom_tile()
+
+```{r}
+mpg |> 
+count(drv, trans) |> 
+  ggplot(aes(x = drv, y = trans, fill = n)) +
+  geom_tile() +
+  geom_text(aes(label = n), color = 'white') +
+  theme_minimal()
+  
+
+```
+
+### geom_ggmosaic()
+
+```{r}
+#| message: false
+
+if(!require(devtools)) install.packages("devtools")
+library(devtools)
+if(!require(ggmosaic)) install.packages("ggmosaic")
+library(ggmosaic)
+
+```
+
+
+#### starwars
+```{r}
+#| warning: false
+
+ggplot(data = titanic) +
+  geom_mosaic(aes(product(Class, Age), fill = Survived))
+
+```
+
+
+### nord()
+> color palette
+
+```{r}
+#| message: false
+
+if(!require(nord)) install.packages(nord)
+library(nord)
+
+ggplot(data = mpg) +
+  geom_mosaic(aes(product(drv),fill = class)) +
+  facet_wrap(.~year) +
+  scale_fill_nord(palette = 'aurora') +
+  geom_mosaic_text(aes(product(class,drv)), size = 3) +
+  theme_minimal()
+```
+
+#### diamonds
+```{r}
+#| warning: false
+
+diamonds |> 
+  ggplot() +
+  geom_mosaic(mapping = aes(product(clarity, color), 
+                            fill = color)) +
+  facet_wrap(.~cut) +
+  scale_fill_nord(palette = 'aurora') +
+  theme(axis.text.x = element_blank(), 
+        axis.ticks.x = element_blank())
+```
+
+
+### GGally::ggcorr()
+
+> 상관계수도 자동으로 계산
+
+```{r}
+#| warning: false
+
+mpg
+GGally::ggcorr(mpg[,c(3,4,5,8,9)], label = T)
+
+ggcorr(mtcars, 
+       nbreaks = 5, 
+       label = TRUE, 
+       label_round = 1, 
+       label_alpha = TRUE)
+```
+
+### library(ggcorrplot)
+
+> 상관계수를 구한 후 ggcorrplot 실행
+
+```{r}
+#| message: false
+
+if(!require(devtools)) install.packages("devtools")
+devtools::install_github("kassambara/ggcorrplot")
+library(ggcorrplot)
+
+
+```
+
+```{r}
+
+corr <- round(cor(mtcars), 1)
+ggcorrplot(corr,
+           hc.order = T,
+           type = "lower",
+           lab = T,
+           outline.color = "white")
+
+```
+
+## 대한민국을 검색하는 방법
+
+### str_match() & str_detect()
+
+> 대한민국의 다양한 영문 표기법
+>
+> > Republic of Korea (Google)
+> >
+> > South Korea (Wikipedia)
+> >
+> > Korea, Rep. (Gap minder)
+> >
+> > KOR (IOC)
+> >
+> > Korea Republic (FIFA)
+
+```{r}
+
+library(gapminder)
+gapminder
+
+```
+
+#### str_match
+
+```{r}
+
+str_match(gapminder$country, 'korea') |> head()
+!is.na(str_match(gapminder$country, 'orea')) |> head()
+sum(!is.na(str_match(gapminder$country, 'orea')))
+
+```
+
+#### str_detect
+
+```{r}
+
+str_detect(gapminder$country, 'orea') |> sum()
+
+
+```
+
+### filter & str_detect
+
+```{r}
+
+gapminder |> 
+  filter(str_detect(gapminder$country, 'orea') > 0) 
+
+```

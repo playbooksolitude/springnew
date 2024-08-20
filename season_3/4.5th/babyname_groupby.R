@@ -45,20 +45,20 @@ babynames |>
 #2-1 1884년에 태어난 남자아이와 여자아이의 수는 몇명인가? ----
 
 
-<<<<<<< HEAD:season_3/5th/babyname_groupby.R
+
 
 #3  
 # bbc_style()
 
 (factor(baby_1groupby$sex) |> 
   fct_relevel(c('M', 'F')) -> baby_1groupby$sex)
-=======
+
 #3 
 (factor(baby_1groupby$sex) |> 
   fct_relevel(c('F', 'M')) -> baby_1groupby$sex)
 (factor(baby_2groupby$sex) |> 
     fct_relevel(c('F', 'M')) -> baby_2groupby$sex)
->>>>>>> 119e5e5072e1a32227894e68e2e80dda03101b8e:season_3/4.5th/babyname_groupby.R
+
 
 # M #red ----
 baby_1groupby |> 
@@ -154,4 +154,6 @@ colSums(is.na(starwars)) |>
   as_tibble(rownames = "col")
 
 is.na(babynames) |> sum()
+
+
 
