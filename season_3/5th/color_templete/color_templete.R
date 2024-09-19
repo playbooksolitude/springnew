@@ -25,8 +25,7 @@ colorspace::hcl_palettes(plot = T)
 df <- data.frame(
   category = rep(letters[1:5], times = 2),
   value = c(3, 5, 2, 8, 7, 4, 6, 9, 10, 5),
-  group = rep(c("Group 1", "Group 2"), each = 5)
-)
+  group = rep(c("Group 1", "Group 2"), each = 5))
 
 #1 colorspace 팔레트 사용 예제
 ggplot(df, aes(x = category, y = value, fill = group)) +
@@ -210,7 +209,7 @@ ggplot(df, aes(x = category, y = value, fill = group)) +
   labs(title = "ggthemes Palette Example", subtitle = "Using ggthemes::Tableau 20")
 
 #12 scico ----
-install.packages('scico')
+#install.packages('scico')
 library(scico)
 
 # scico 팔레트 사용 예제
@@ -221,7 +220,7 @@ ggplot(df, aes(x = category, y = value, fill = group)) +
   labs(title = "scico Palette Example", subtitle = "Using scico::tokyo")
 
 #13 ochRe ----
-install.packages('ochRe')
+#install.packages('ochRe')
 library(ochRe)
 
 # 샘플 데이터

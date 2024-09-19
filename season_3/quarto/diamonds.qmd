@@ -1,0 +1,160 @@
+---
+title: "Diamonds"
+format: html
+editor: visual
+---
+
+```{r, setup }
+#| message: false
+
+library(tidyverse)  #라이브러리 로드
+library(ggmosaic)
+library(GGally)
+
+```
+
+<br>
+
+다이아몬드 데이터셋을 조회합니다.
+
+```{r}
+
+diamonds
+
+```
+
+53,940행, 10열의 크기이므로 총 539,400개의 데이터를 갖고 있습니다.
+
+각 열(컬럼)은 아래와 같습니다.
+
+참고 : <https://blog.naver.com/ss1ca/221592449859>
+
+-   carat(캐럿) : 다이아몬드의 무게를 나타내는 단위 (소수점 단위로 표시)
+
+-   cut(컷) : 다이아몬드의 광채와 반짝임 정도
+
+    -   "Fair" (공정)
+
+    <!-- -->
+
+    -   "Good" (좋음)
+
+    -   "Very Good" (매우 좋음)
+
+    -   "Premium" (프리미엄)
+
+    -   "Ideal" (이상적)
+
+-   color(컬러) : 다이아몬드의 색상이 무색에 가까울수록 가치가 높음
+
+    -   "D" (무색)
+
+    -   "E" (무색)
+
+    -   "F" (무색)
+
+    -   "G" (무색에 가까움)
+
+    -   "H" (무색에 가까움)
+
+    -   "I" (무색에 가까움)
+
+    -   "J" (가장 색상이 진함)
+
+-   clarity(클래러티) : 투명도로서 내포물(내부 결함)과 결점(외부 결함)의 정도를 표현
+
+    -   "I1" (포함된 결함)
+
+    -   "SI2" (약간의 내부적 특징이 있음2)
+
+    -   "SI1" (약간의 내부적 특징이 있음1)
+
+    -   "VS2" (**미세한 내부적 특징이 있음**)
+
+    -   "VS1" (**미세한 내부적 특징이 있음1**)
+
+    -   "VVS2" (아주 미세한 내부적 특징이 있음2)
+
+    -   "VVS1" (아주 미세한 내부적 특징이 있음1)
+
+    -   "IF" (**다이아몬드에 내부적 특징은 없으나 극히 미세한 외부적 특징이 있음**)
+
+-   depth(깊이 비율) : 다이아몬드의 전체 높이와 테이블 너비의 비율
+
+    -   계산 방식 : (z / 평균(x, y)) \* 100
+
+-   table(테이블 비율) : 다이아몬드의 상단 평면(테이블)의 너비를 나타내는 비율
+
+-   price(가격) : 다이아몬드 가격
+
+-   x(길이) : 다이아몬드의 길이
+
+-   y(높이) : 다이아몬드의 높이
+
+-   z(깊이) : 다이아몬드의 깊이
+
+```{r}
+
+diamonds |> 
+  ggplot(aes(x = clarity, y = price)) +
+  #geom_point()
+  geom_boxplot()
+```
+
+#### 데이터셋 구조 파악
+
+다이아몬드 구조를 확인합니다.
+
+```{r}
+
+diamonds |> str()
+
+diamonds |> 
+  is.na() |> 
+  colSums()
+
+```
+
+```{r}
+
+diamonds |> 
+  ggplot() +
+  geom_mosaic(aes(product(clarity), fill = color))
+
+
+```
+
+#### depth \* table
+
+```{r}
+
+diamonds |> 
+  ggplot(aes(x = depth, y = table)) +
+  geom_point()
+
+```
+
+#### depth \* table
+
+```{r}
+
+diamonds |> 
+  ggplot(aes(x = table, y = price)) +
+  geom_point(alpha = .5) +
+  facet_wrap(.~cut)
+```
+
+```{r}
+
+
+diamonds |> 
+  pairs()
+
+```
+
+```{r}
+
+diamonds |> 
+  ggpairs()
+
+```

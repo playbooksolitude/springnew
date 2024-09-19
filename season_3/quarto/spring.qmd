@@ -1,29 +1,27 @@
 ---
-title: "quarto_spring"
-author: "CHOI YO HAN"
+title: "Data set"
+author: "최요한"
 format: html
 editor: visual
 ---
 
-## Quarto
+## Data set
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-```{r setup}
+```{r setup, message=FALSE}
 
 library(tidyverse)
-library(babynames)
 
 
 ```
 
 ## Running Code
 
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
-
 ```{r}
 
-mpg
+(mpg |> 
+   ggplot(aes(displ, cty, color = class)) +
+   geom_point() +
+   labs(title = 'theme') -> p)
 
 ```
 
