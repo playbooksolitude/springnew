@@ -52,13 +52,13 @@ babynames |>
 
 (factor(baby_1groupby$sex) |> 
   fct_relevel(c('M', 'F')) -> baby_1groupby$sex)
-=======
+
 #3 
 (factor(baby_1groupby$sex) |> 
   fct_relevel(c('F', 'M')) -> baby_1groupby$sex)
 (factor(baby_2groupby$sex) |> 
     fct_relevel(c('F', 'M')) -> baby_2groupby$sex)
->>>>>>> 119e5e5072e1a32227894e68e2e80dda03101b8e:season_3/4.5th/babyname_groupby.R
+
 
 # M #red ----
 baby_1groupby |> 

@@ -3,7 +3,7 @@
 #
 #install.packages('ggmosaic')
 library(ggmosaic)
-
+library(tidyverse)
 #
 example(ggmosaic)
 ?ggmosaic()
@@ -21,7 +21,7 @@ mpg
 library(nord)
 ggplot(data = mpg) +
   geom_mosaic(aes(product(drv),fill = class)) +
-  facet_wrap(.~year) +
+  #facet_wrap(.~year) +
   scale_fill_nord(palette = 'aurora') +
   geom_mosaic_text(aes(product(class,drv)), size = 4) +
   theme_minimal()
@@ -42,14 +42,16 @@ starwars |>
 
 #
 library(nord)
+
+# diamonds ----
 diamonds |> 
   ggplot() +
-  geom_mosaic(mapping = aes(product(clarity, color), 
+  geom_mosaic(mapping = aes(product(cut, color), 
                             fill = color)) +
-  facet_wrap(.~cut) +
+  #facet_wrap(.~cut) +
   scale_fill_nord(palette = 'aurora') +
-  theme(axis.text.x = element_blank(), 
-        axis.ticks.x = element_blank())
+  theme_minimal() +
+  theme(legend.position = 'none')
 
 #
 diamonds |> 
@@ -67,7 +69,8 @@ mpg |>
              subgroup = manufacturer)) +
   geom_treemap() +
   geom_treemap_text(aes(label = n)) +
-  geom_treemap_subgroup_text()
+  geom_treemap_subgroup_text() +
+  scale_fill_nord(palette = 'aurora')
 
 mpg |> 
   count(manufacturer, sort = T) |>
@@ -76,11 +79,11 @@ mpg |>
              fill = n)) +
   geom_tile()
 
-
 #
 mpg |> 
   count(manufacturer) |> 
   filter(manufacturer == 'subaru')
+
 #
 mpg |> 
   filter(drv == 'f', 

@@ -4,7 +4,7 @@ format: html
 editor: visual
 ---
 
-## Quarto
+# Quarto 2024.08.18.
 
 Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
 
@@ -12,12 +12,16 @@ Quarto enables you to weave together content and executable code into a finished
 
 When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
 
+
 ```{r setup, message=FALSE, warning=FALSE}
 
+#install.packages('gt')
 library(tidyverse)
 library(gt)
-#remotes::install_github("ricardo-bion/ggradar")
+remotes::install_github("ricardo-bion/ggradar")
 library(ggradar)
+library(gapminder)
+
 library(GGally)
 library(bbplot)
 library(babynames)
@@ -140,6 +144,7 @@ iris |>
 ## ggpairs
 
 ```{r}
+#| warning: false
 
 iris |> 
   GGally::ggpairs(aes(colour = Species))
@@ -151,9 +156,14 @@ iris |>
 ```{r}
 
 mtcars |> 
+  rownames_to_column('cars') |> 
+  mutate_at(vars(-cars), scales::resc)
+
+
+mtcars |> 
   rownames_to_column(var = 'cars') |>
   mutate_at(vars(-cars), scales::rescale) |> 
-  tail(2) |> 
+  tail(4) |> 
   select(1:8) |> 
   ggradar::ggradar()
 
@@ -166,7 +176,7 @@ mtcars |>
 
 ```
 
-### MPG cty ~ hwy
+### MPG cty \~ hwy
 
 > 도시연비(cty)가 증가할수록 고속도로 연비(hwy)가 증가
 
@@ -177,7 +187,7 @@ ggplot() +
        aes(x = cty, y = hwy), 
        color = 'grey') +
   geom_point(data = mpg |> 
-               filter(drv == 'f'), 
+               filter(drv %in% c('r','f')),
        aes(x = cty, y = hwy), 
        color = 'red') 
 
@@ -203,7 +213,7 @@ ggplot() +
 
 > trans %in% c('manual(m5)', 'manual(m6)')
 >
-> drv ~ cyl
+> drv \~ cyl
 
 ```{r}
 mpg |> filter(trans == 'manual(m6)')
@@ -225,6 +235,14 @@ ggplot() +
 ### geom_tile()
 
 ```{r}
+
+mpg |> 
+  count(drv, trans) |> 
+  ggplot(aes(x = drv, y = trans, fill = n)) +
+  geom_tile() +
+  geom_text(aes(label = n), color = 'white') +
+  theme_minimal()
+
 mpg |> 
 count(drv, trans) |> 
   ggplot(aes(x = drv, y = trans, fill = n)) +
@@ -247,18 +265,19 @@ library(ggmosaic)
 
 ```
 
-
 #### starwars
+
 ```{r}
 #| warning: false
+library(ggmosaic)
 
 ggplot(data = titanic) +
   geom_mosaic(aes(product(Class, Age), fill = Survived))
 
 ```
 
-
 ### nord()
+
 > color palette
 
 ```{r}
@@ -276,6 +295,7 @@ ggplot(data = mpg) +
 ```
 
 #### diamonds
+
 ```{r}
 #| warning: false
 
@@ -288,7 +308,6 @@ diamonds |>
   theme(axis.text.x = element_blank(), 
         axis.ticks.x = element_blank())
 ```
-
 
 ### GGally::ggcorr()
 
@@ -359,9 +378,14 @@ gapminder
 
 ```{r}
 
+
+sum(!is.na(str_match(gapminder$country, 'orea')))
+
 str_match(gapminder$country, 'korea') |> head()
 !is.na(str_match(gapminder$country, 'orea')) |> head()
 sum(!is.na(str_match(gapminder$country, 'orea')))
+
+
 
 ```
 
@@ -370,7 +394,13 @@ sum(!is.na(str_match(gapminder$country, 'orea')))
 ```{r}
 
 str_detect(gapminder$country, 'orea') |> sum()
+str_detect(gapminder$country, 'orea') |> sum()
 
+gapminder |> 
+  filter(str_detect(gapminder$country, 'orea') > 0) |> view()
+
+gapminder |> 
+  filter(country == 'Korea, Rep.')
 
 ```
 

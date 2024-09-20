@@ -6,17 +6,19 @@ editor: visual
 ---
 
 ## Quarto
+
 Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
 
 ```{r setup}
 #| message: false
 
 library(tidyverse)
+library(patchwork)
 
 ```
 
-
 # I. dataset sample
+
 ```{r }
 
 (mpg |> 
@@ -46,23 +48,27 @@ library(tidyverse)
 ```
 
 # II. palette
+
 ## 1. colorspace
+
 ```{r, fig.width=12, fig.height=9}
 
 library(colorspace)
 colorspace::hcl_palettes(plot = T)
   
 ```
+
 #### Dark 2
+
 ```{r}
-p +
+
+p / p +
   colorspace::scale_color_discrete_qualitative('Dark 2')
 
 ```
 
-
-
 #### rainbow_hcl(2)
+
 ```{r}
 
 library(colorspace)
@@ -71,8 +77,8 @@ q +
 
 ```
 
-
 ## 2. RColorBrewer
+
 ```{r, fig.width=10, fig.height=10}
 
 library(RColorBrewer)
@@ -81,22 +87,25 @@ display.brewer.all()
 ```
 
 ### palette = "Set1"
+
 ```{r}
 
 q +
   scale_fill_discrete_diverging("Cork")
 
 ```
+
 #### 
+
 ```{r}
 
 d +
-  scale_fill_continuous_sequential('peach') 
+  scale_fill_continuous_sequential('Reds') 
 
 ```
 
-
 ## 3. viridis()
+
 ```{r}
 #| message: false
 
@@ -111,8 +120,8 @@ ggplot(df, aes(x = category, y = value, fill = group)) +
 
 ```
 
-
 ## 4. scales()
+
 ```{r}
 #| message: false
 
@@ -127,8 +136,7 @@ ggplot(df, aes(x = category, y = value, fill = group)) +
 
 ```
 
-```
-
+\`\`\`
 
 ## 6
 
@@ -137,4 +145,3 @@ ggplot(df, aes(x = category, y = value, fill = group)) +
 ## 8
 
 ## 9
-
