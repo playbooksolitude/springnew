@@ -2,6 +2,14 @@
 
 library(tibble)
 library(dplyr)
+library(ggplot2)
+library(ggplot2movies)
+
+movies |> 
+  slice(1:100) |> 
+  rowwise() |> 
+  mutate(sum = sum(c_across(r1:r10)), .before = 1)
+
 
 (data <- tibble(
   name = c("Alice", "Bob", "Charlie"),
@@ -18,7 +26,7 @@ library(dplyr)
     mutate(mean_score = mean(c(score1, score2))))
 
 (data4 <- data %>% 
-      () %>% 
+    rowwise() |> 
     mutate(mean_score = mean(c(score1, score2))))
 
 
