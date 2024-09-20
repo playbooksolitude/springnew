@@ -1,0 +1,50 @@
+---
+title: "across"
+author: "최요한"
+format: html
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## across()
+
+`across()` 함수는 `dplyr` 패키지의 함수로, 데이터프레임이나 티블(tibble)에서 여러 열(column)에 대해 동일한 작업을 수행할 때 사용한다.
+
+이 함수는 주로 `mutate()`, `summarize()`, `filter()` 등과 함께 사용한다.
+
+```{r setup, message=FALSE}
+
+library(tidyverse)
+library(gt)
+
+```
+
+You can add options to executable code like this
+
+```{r}
+
+mpg |> head()
+
+```
+
+```{r}
+
+mpg |> str()
+
+```
+
+### across()
+
+chr (문자열) 자료형 중에서 'trans', 'drv', 'fl', 'class'를 한번에 factor() 형으로 자료변형할 수 있다. 
+
+mutate와 함께 적용
+
+```{r}
+
+mpg |> 
+  count(manufacturer, drv, class)
+
+```

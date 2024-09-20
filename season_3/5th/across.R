@@ -4,12 +4,22 @@
 # 
 library(tidyverse)
 
-# 여러열을 변환
+# character 자료형을 factor()로 변경
+mpg |> 
+  mutate(across(c(drv, fl), factor))
+
+#
+#
+starwars |> 
+  mutate(across(c(hair_color, skin_color, eye_color, sex, gender), 
+                factor))
+
 # 데이터 프레임 예시
-(df <- data.frame(
+(df <- tibble(
   var1 = c("a", "b", "c", "a"),
   var2 = c("x", "y", "z", "x"),
   var3 = c(1, 2, 3, 1)))
+
 str(df)
 
 # across()를 사용하여 여러 열을 factor로 변환
@@ -18,7 +28,18 @@ df %>%
   str()
 
 #
-(df_1 <- data.frame(
+df |> 
+  mutate(across(c(var1, var2), factor))
+
+#
+mtcars |> 
+  rownames_to_column('cars') |> 
+  mutate_at(vars(-cars), scales::rescale) |> 
+  tail(2) |> 
+  ggradar()
+
+#
+(df_1 <- tibble(
   group = c("A", "A", "B", "B"),
   var1 = c(1, 2, 3, 4),
   var2 = c(5, 6, 7, 8)))
@@ -26,7 +47,7 @@ df %>%
 # across()를 사용하여 여러 열의 합계를 계산
 (summary_df <- df_1 %>%
   group_by(group) %>%
-  summarise(across(c(var1, var2), sum, na.rm = TRUE)))
+  reframe(across(c(var1, var2), sum, na.rm = TRUE)))
 
 #
 df_1 |> 
@@ -37,3 +58,5 @@ df_1 |>
   group_by(group) |> 
   reframe(across(c(var1, var2),sum))
   
+
+

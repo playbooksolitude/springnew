@@ -4,6 +4,8 @@
 library(ggplot2)
 library(dplyr)
 
+data(package = .packages(all.available = TRUE))
+
 #
 # 1. mpg
 # mpg 데이터셋은 자동차 연비에 관한 정보를 포함하고 있습니다. 이 데이터셋은 ggplot2의 기능을 시연하는 데 자주 사용됩니다.
@@ -83,5 +85,7 @@ library(dplyr)
 # inventory: 재고
 # date: 날짜
 
+#6 boot
+#부트스트래핑
 
 
