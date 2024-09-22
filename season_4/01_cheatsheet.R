@@ -21,3 +21,4 @@ ggplot(data = mpg) +
         legend.position = 'none')                   # 범례는 지우기
 
 #
+rm()
