@@ -12,7 +12,10 @@ example("geom_mosaic")
 
 #titanic
 ggplot(data = titanic) +
-  geom_mosaic(aes(product(Class, Age), fill = Survived))
+  geom_mosaic(aes(product(Class, Age), fill = Survived)) +
+  scale_fill_nord(palette = 'aurora') +
+  theme(axis.text = element_blank(), 
+        axis.ticks = element_blank())
 
 mpg
 library(nord)
