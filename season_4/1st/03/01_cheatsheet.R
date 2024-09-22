@@ -21,19 +21,15 @@ ggplot(data = mpg) +
         strip.background = element_rect(fill = 'lightpink'), # 분할 배경은 분홍
         legend.position = 'none')                   # 범례는 지우기
 
-#
-library(ggplot2)
-library(showtext)
 
 # Google 폰트를 사용하여 뉴욕타임즈 스타일 폰트 적용
 font_add_google("Playfair Display", "nyt")
 showtext_auto()
 
 # 데이터 생성
-data <- data.frame(
+data.frame(
   year = c(2018, 2019, 2020, 2021),
-  value = c(100, 120, 150, 180)
-)
+  value = c(100, 120, 150, 180)) -> data
 
 # 뉴욕타임즈 스타일 차트 생성
 ggplot(data, aes(x = year, y = value)) +
@@ -50,5 +46,4 @@ ggplot(data, aes(x = year, y = value)) +
   labs(
     title = "New York Times Style Line Chart",
     subtitle = "This is a custom ggplot2 chart styled like a NYT graphic",
-    caption = "Source: Example Data"
-  )
+    caption = "Source: Example Data")
