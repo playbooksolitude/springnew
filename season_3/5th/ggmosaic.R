@@ -20,7 +20,7 @@ ggplot(data = mpg) +
   geom_mosaic(aes(product(drv),fill = class)) +
   #facet_wrap(.~year) +
   scale_fill_nord(palette = 'aurora') +
-  geom_mosaic_text(aes(product(class,drv)), size = 4) +
+  #geom_mosaic_text(aes(product(class,drv)), size = 4) +
   theme_minimal()
 
 #
