@@ -3,6 +3,15 @@
 # t-test
 
 #
+sleep
+t.test(extra)
+
+t.test(extra ~ group, data = sleep, paired = T)
+t.test(extra ~ group, data = sleep, paired = F)
+?t.test()
+
+
+
 # 예제 데이터 생성
 group1 <- c(10, 12, 14, 15, 16, 20)
 group2 <- c(22, 24, 25, 26, 27, 30)
@@ -15,7 +24,6 @@ group1;group2
 t.test(group1, group2, paired = T) #t = -36.336
 
 
-summary(t_test_result)
 t.test(group1, group2)
 t.test(group2, group1)
 #t 값 (t-statistic):

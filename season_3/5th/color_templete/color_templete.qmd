@@ -13,6 +13,7 @@ Quarto enables you to weave together content and executable code into a finished
 #| message: false
 
 library(tidyverse)
+library(patchwork)
 
 ```
 
@@ -60,7 +61,8 @@ colorspace::hcl_palettes(plot = T)
 #### Dark 2
 
 ```{r}
-p +
+
+p / p +
   colorspace::scale_color_discrete_qualitative('Dark 2')
 
 ```
@@ -98,7 +100,7 @@ q +
 ```{r}
 
 d +
-  scale_fill_continuous_sequential('peach') 
+  scale_fill_continuous_sequential('Reds') 
 
 ```
 
