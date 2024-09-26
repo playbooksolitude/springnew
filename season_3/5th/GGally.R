@@ -19,8 +19,8 @@ twitter_spambots
 
 
 #1. 변수 간 관계를 시각화 ----
-ggpairs(flea, aes(color = species))
 flea |> str()
+ggpairs(flea, aes(color = species))
 flea |> count(species)
 
 #2. ggscatmat() - 간단한 산점도 행렬
@@ -46,9 +46,8 @@ ggmatrix(list(pm, pm), 2, 1)
 ggparcoord(mtcars, columns = 1:5, groupColumn = "cyl", scale = "uniminmax")
 
 
-
 #
-install.packages('survival')
+#install.packages('survival')
 library(survival)
 fit <- survfit(Surv(time, status) ~ sex, data = lung)
 ggsurv(fit)
@@ -63,7 +62,8 @@ ggcoef(fit, exponentiate = FALSE)
 #baseball -----
 
 # 1. ggpairs() - 산점도 행렬 및 히스토그램
-ggpairs(baseball[, c("year", "stint", "hr", "rbi")], aes(color = factor(stint)))
+ggpairs(baseball[, c("year", "stint", "hr", "rbi")], 
+        aes(color = factor(stint)))
 
 # 2. ggscatmat() - 간단한 산점도 행렬
 ggscatmat(baseball, columns = c("year", "stint", "hr", "rbi"), color = "team")
