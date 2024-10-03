@@ -24,7 +24,7 @@ str(df)
 
 # across()를 사용하여 여러 열을 factor로 변환
 df %>%
-  mutate(across(c(var1, var2), factor)) |> 
+  mutate(across(c(var1, var2), factor))  
   str()
 
 #
