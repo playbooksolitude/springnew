@@ -63,6 +63,33 @@ penguins |>
   geom_point() +
   geom_smooth(method = "lm", se = F)
 
+## 3-2 sex ----
+penguins |> 
+  drop_na(bill_length_mm, bill_depth_mm) |> 
+  ggplot(aes(x = bill_length_mm, 
+             y = bill_depth_mm,
+             color = sex)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F)
+
+## 3-3 isalnd ----
+penguins |> 
+  drop_na(bill_length_mm, bill_depth_mm) |> 
+  ggplot(aes(x = bill_length_mm, 
+             y = bill_depth_mm,
+             color = island)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F)
+
+## 3-4 year ----
+penguins |> 
+  drop_na(bill_length_mm, bill_depth_mm) |> 
+  ggplot(aes(x = bill_length_mm, 
+             y = bill_depth_mm,
+             color = factor(year))) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F)
+
 
 # 4 smooth by island  ---- 
 penguins |> 
