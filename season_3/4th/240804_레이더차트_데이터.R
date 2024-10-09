@@ -9,8 +9,43 @@ library(tidyverse)
 library(googlesheets4)
 
 #1 csv
-(read_tsv("./season_3/4.5th/data_job8.tsv") -> thx4_csv)
-(googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1HMr2YJlBkcAV8JkmQY31aL1oTNECO-LeB7MaUXHlHNQ/edit#gid=0") -> report_csv)
+(read_tsv("./season_3/4th/data_job8.tsv") -> thx4_csv)
+# (googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1HMr2YJlBkcAV8JkmQY31aL1oTNECO-LeB7MaUXHlHNQ/edit#gid=0") -> report_csv)
+
+thx4_csv |> view()
+
+#
+tibble(
+  `비즈 인사이트` = 10,
+  가설검정 = 10,
+  통계 = 10, 
+  머신러닝 = 10,
+  `개발&배포` = 10,
+  `데이터 파이프라인` = 10,
+  `데이터베이스 구축` = 10,
+  성과지표 = 10,
+  시각화 = 10,
+) -> data_job
+
+#
+temp1 <- c(0,0,0,0,0,0,0,0,0)
+temp2 <- c(1,1,1,5,8,10,10,3,11)
+temp1 <- c(0,0,0,0,0,0,0,0,0)
+temp1 <- c(0,0,0,0,0,0,0,0,0)
+temp1 <- c(0,0,0,0,0,0,0,0,0)
+
+
+rbind(data_job, temp1, temp2) |> 
+  ggradar::ggradar()
+temp1    
+
+tibble(
+  a = c(1,2),
+  b = c(3,4)
+) -> temp1
+
+temp1 |> 
+  add_row(repliy(2, c(0,0)))
 
 #
 report_csv |> slice(1,2,4) |> 

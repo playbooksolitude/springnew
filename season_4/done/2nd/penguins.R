@@ -22,7 +22,7 @@ penguins |> str()
 #
 penguins |> 
   ggplot(aes(x = bill_length_mm, 
-    y = bill_depth_mm)) +
+             y = bill_depth_mm)) +
   geom_point() 
 
 
@@ -49,17 +49,44 @@ penguins |>
 penguins |> 
   drop_na(bill_length_mm, bill_depth_mm) |> 
   ggplot(aes(x = bill_length_mm, 
-    y = bill_depth_mm,
-    color = species)) +
+             y = bill_depth_mm,
+             color = species)) +
   geom_point()
-  
+
 
 ## 3-1 species ----
 penguins |> 
   drop_na(bill_length_mm, bill_depth_mm) |> 
   ggplot(aes(x = bill_length_mm, 
-    y = bill_depth_mm,
-    color = species)) +
+             y = bill_depth_mm,
+             color = species)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F)
+
+## 3-2 sex ----
+penguins |> 
+  drop_na(bill_length_mm, bill_depth_mm) |> 
+  ggplot(aes(x = bill_length_mm, 
+             y = bill_depth_mm,
+             color = sex)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F)
+
+## 3-3 isalnd ----
+penguins |> 
+  drop_na(bill_length_mm, bill_depth_mm) |> 
+  ggplot(aes(x = bill_length_mm, 
+             y = bill_depth_mm,
+             color = island)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F)
+
+## 3-4 year ----
+penguins |> 
+  drop_na(bill_length_mm, bill_depth_mm) |> 
+  ggplot(aes(x = bill_length_mm, 
+             y = bill_depth_mm,
+             color = factor(year))) +
   geom_point() +
   geom_smooth(method = "lm", se = F)
 
@@ -68,44 +95,44 @@ penguins |>
 penguins |> 
   drop_na(bill_length_mm, bill_depth_mm) |> 
   ggplot(aes(x = bill_length_mm, 
-    y = bill_depth_mm,
-    colour = island)) +
+             y = bill_depth_mm,
+             colour = island)) +
   geom_point()
 
 # 4-1 island ----
-  penguins |> 
-    drop_na(bill_length_mm, bill_depth_mm) |> 
-    ggplot(aes(x = bill_length_mm, 
-      y = bill_depth_mm,
-      colour = island)) +
-    geom_point() +
+penguins |> 
+  drop_na(bill_length_mm, bill_depth_mm) |> 
+  ggplot(aes(x = bill_length_mm, 
+             y = bill_depth_mm,
+             colour = island)) +
+  geom_point() +
   geom_smooth(method = "lm", se = F) #--회귀선 
-  
+
 # 5 sex ----
 penguins |> 
   drop_na() |> 
   ggplot(aes(x = bill_length_mm, 
-    y = bill_depth_mm,
-    colour = sex)) +
+             y = bill_depth_mm,
+             colour = sex)) +
   geom_point()
 
 # 5-1 sex ----
 penguins |> 
   drop_na() |> 
   ggplot(aes(x = bill_length_mm, 
-    y = bill_depth_mm,
-    colour = sex)) +
+             y = bill_depth_mm,
+             colour = sex)) +
   geom_point() +
   geom_smooth(method = "lm", se = F) #--회귀선 
 
-  
-  
+
+
 # 6 면분할 ---- 
 penguins |> 
   drop_na() |> 
   ggplot(aes(x = bill_length_mm, 
-    y = bill_depth_mm, 
-    color = species)) +
+             y = bill_depth_mm, 
+             color = species)) +
   geom_point() +
   geom_smooth(method = "lm", se = F) +
   facet_grid(sex~island) +
@@ -118,22 +145,22 @@ penguins
 
 penguins |> 
   ggplot(aes(x = bill_length_mm, 
-    y = bill_depth_mm)) +
+             y = bill_depth_mm)) +
   geom_violin()
 
 ## 7-1 ----
 penguins |> 
   drop_na() |> 
   ggplot(aes(x = bill_length_mm, 
-    y = bill_depth_mm,
-    color = species)) +
+             y = bill_depth_mm,
+             color = species)) +
   geom_violin() +
   geom_smooth(method = "lm", se = F) +
   facet_grid(.~species) +
   theme(strip.background = element_rect(fill = "red"))
 
-  # facet_wrap(.~sex+species)
-  # facet_wrap(.~sex+species) 
+# facet_wrap(.~sex+species)
+# facet_wrap(.~sex+species) 
 
 bbc_style
 
