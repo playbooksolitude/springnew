@@ -15,16 +15,11 @@ read_sheet("https://docs.google.com/spreadsheets/d/16ZgYbL6GeSn9vLEKz1rXu4afzRFG
 max <- c(5,5,5,5,5,5,5,5,5)
 min <- c(0,0,0,0,0,0,0,0,0)
 
-#read_table(pipe("pbpaste")) -> t
-# t |> write_csv("./season_4/backlog/DataAnalitics.csv")
-#read_csv("./season_4/backlog/DataAnalitics.csv") -> t
-
-
 (t |> 
   pivot_longer(cols = c(2:5),
     names_to = '구분', 
     values_to = 'value') |> 
-  pivot_wider(names_from = 스펙,
+    pivot_wider(names_from = '스펙',
     values_from = value) |> 
   select(-1) -> t2)
 
@@ -60,6 +55,13 @@ t3 |> slice(1,2,5) |>
     vlcex = 1.5, 
     cex.main = 2.5)
 
+#ML engineer
+t3 |> slice(1,2,6) |> 
+  radarchart(pcol="#847574", pfcol = "#84757480",
+    title = "ML Engineer",
+    vlcex = 1.5, 
+    cex.main = 2.5)
+
 #Data Scientist
 t3 |> slice(1,2,4) |> 
   radarchart(pcol="#1B9E77", pfcol = "#1B9E7780",
@@ -67,12 +69,6 @@ t3 |> slice(1,2,4) |>
     title = "Data Scientist", 
     cex.main = 2.5) 
 
-#ML engineer
-t3 |> slice(1,2,6) |> 
-  radarchart(pcol="#847574", pfcol = "#84757480",
-    title = "ML Engineer",
-    vlcex = 1.5, 
-    cex.main = 2.5)
 
 # ----
 
