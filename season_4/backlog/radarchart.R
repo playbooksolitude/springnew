@@ -25,15 +25,6 @@ min <- c(0,0,0,0,0,0,0,0,0)
 
 (rbind(max, min, t2) -> t3)
 
-# t3 |> 
-#   radarchart()
-
-# 동시에 그리기 ----------------------------------
-# t3 |> 
-#   radarchart(pcol=colors_in, pfcol = colors_out,
-#     title = "ML Engineer",
-#     vlcex = 1.5) 
-
 # 컬러 지정 #1 수동
 c("#F76461", "#1B9E77", 
   "#E79C54", "#847574") -> colors_in #면적
@@ -41,6 +32,7 @@ c("#F76461", "#1B9E77",
 c("#F764614c", "#1B9E774c", 
   "#E79C544c", "#8475744c") -> colors_out #테두리
 
+# 화면 그리기 ----------------------------------
 #Data Analytics
 t3 |> slice(1:3) |> 
   radarchart(pcol="#F76461", pfcol = "#F7646180",
@@ -69,10 +61,7 @@ t3 |> slice(1,2,4) |>
     title = "Data Scientist", 
     cex.main = 2.5) 
 
-
-# ----
-
-#화면 4분할
+#화면 4분할 ----
 #op <- par(mar=c(1, 2, 2, 1), mfrow=c(2, 2))
 op <- par(mfrow=c(2, 2))
 op

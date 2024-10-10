@@ -7,6 +7,7 @@
 
 #
 library(tidyverse)
+library(ggmosaic)
 
 #
 data()
