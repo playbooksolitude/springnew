@@ -2,11 +2,14 @@
 
 #
 if(!require(palmerpenguins))install.packages("palmerpenguins")
+install.packages('palmerpenguins')
 library(palmerpenguins)
 library(tidyverse)
 
 # ----
 penguins
+
+tail(penguins)
 
 # palmerpenguins ----
 #https://allisonhorst.github.io/palmerpenguins/
@@ -18,13 +21,30 @@ penguins
 # 1-1
 str(penguins)
 penguins |> str()
+str(penguins)
+penguins |> str()
+drop_na()
+#
+penguins |> 
+  drop_na(species, sex, island) |> 
+  ggplot(mapping = aes(color = species, 
+    x = bill_length_mm, 
+    y = bill_depth_mm)) +
+  geom_point() +
+  geom_smooth(se = F, method = 'lm') +
+  ggtitle(label = 'palmerpenguins', 
+    subtitle = '24.10.06') +
+  facet_grid(island~sex)
 
 #
 penguins |> 
+  drop_na(sex, species) |> 
   ggplot(aes(x = bill_length_mm, 
-             y = bill_depth_mm)) +
-  geom_point() 
-
+    y = bill_depth_mm, 
+    color = species)) +
+  geom_point() +
+  geom_smooth(se = F, method = 'lm') +
+  facet_grid(island~sex)
 
 
 #
