@@ -68,4 +68,16 @@ pairs(iris[, 1:4],
       col = iris$Species)
 iris[,1:4]
 
+flights |> 
+  group_by(origin, dest) |> 
+  reframe(n = n()) |> 
+  pivot_wider(names_from = 'origin', values_from = 'n')
+
+#
+flights |> 
+  group_by(origin, dest) |> 
+  reframe(n = n()) |> 
+  ggplot(aes(x = origin, y = dest, fill = n)) +
+  geom_tile() +
+  colorspace::scale_fill_continuous_sequential('peach')
 

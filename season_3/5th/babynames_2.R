@@ -2,14 +2,30 @@
 
 #
 library(tidyverse)
+library(ggmosaic)
 library(babynames)
 babynames::babynames
 
 #
-librarians
+babynames |> 
+  count(year, sex)
+
+babynames |> 
+  ggplot() +
+  geom_mosaic(aes(product(year), fill = sex))
 
 #
+babynames |> 
+  ggplot() + 
+  geom_histogram(aes(x = year, fill = sex)) +
+  facet_wrap(.~sex)
 
+#
+babynames |> 
+  ggplot() + 
+  geom_histogram(aes(x = year, fill = sex), position = 'identity')
+
+#
 ChickWeight |> 
   str()
 

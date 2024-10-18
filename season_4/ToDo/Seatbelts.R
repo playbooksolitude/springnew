@@ -8,11 +8,16 @@ data()
 Seatbelts
 Seatbelts |> view()
 Seatbelts |> head()
+Seatbelts[,0]
 Seatbelts[1:3,]
+Seatbelts[,1:8]
 Seatbelts |> str()
+tibble(a = c(1:192))
 
 #
 Seatbelts |> tail()
+data.frame(t1)
+Seatbelts[,0]
 
 #
 # 운전자 사망자 수 시각화
@@ -30,7 +35,10 @@ Seatbelts_time |>
   bind_cols(Seatbelts_df) |> view()
   
 #
-Seatbelts[,2] |> tibble()
+Seatbelts
+Seatbelts |> as.data.frame()
+floor(time(Seatbelts))
+cycle(Seatbelts)
 
 #
 t.test(DriversKilled ~ law, data = Seatbelts)

@@ -9,6 +9,8 @@ showtext_auto()
 data()
 ToothGrowth
 ToothGrowth |> head()
+ToothGrowth |> count(dose)
+
 
 #
 ToothGrowth |> summary()
@@ -31,7 +33,7 @@ ggplot(ToothGrowth, aes(x = factor(dose), y = len)) +
 #
 ToothGrowth |> 
   ggplot(aes(x = factor(dose), y = len)) +
-  geom_boxplot(outlier.color = 'black') +
+  geom_boxplot(outlier.color = 'red', outlier.shape = 4) +
   geom_point(position = position_jitter(.1), aes(color = factor(dose)),
              show.legend = F) +
   #geom_point(alpha = .5) +
@@ -75,6 +77,7 @@ t_test_result
 #   p-값이 0.06063으로 0.05보다 약간 크기 때문에 OJ와 VC 간의 치아 성장 차이가 있다고 볼 수는 있지만, 그 차이가 통계적으로 유의미하다고 확신할 수 없다는 결론입니다.
   
 anova_result <- aov(len ~ factor(dose), data = ToothGrowth)
+summary(anova_result)
 
 # 결과 확인
 # summary(anova_result) 
