@@ -1,5 +1,9 @@
 #24-1006
 
+#패키지 불러오기
+source("~/Documents/springnew/season_4/done/p_load.R", echo = TRUE)
+
+
 #
 library(tidyverse)
 library(patchwork)
