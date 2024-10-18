@@ -8,6 +8,7 @@ pacman::p_load(
   "wesanderson",
   "patchwork",
   "ggrepel", 
+  "GGally",
   "googlesheets4", 
   "plotly"
 )

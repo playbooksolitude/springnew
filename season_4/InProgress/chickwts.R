@@ -3,12 +3,10 @@
 #패키지 불러오기
 source("~/Documents/springnew/season_4/done/p_load.R", echo = TRUE)
 
-
-#
-library(tidyverse)
-library(patchwork)
-library(showtext)
-showtext_auto()
+# library(tidyverse)
+# library(patchwork)
+# library(showtext)
+# showtext_auto()
 
 #
 chickwts |> head()
