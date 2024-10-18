@@ -16,7 +16,8 @@ penguins
 
 # 1 패키지::데이터 ----
 palmerpenguins::penguins
-penguins
+penguins |> head()
+penguins |> count(year)
 
 # 1-1
 str(penguins)
@@ -194,6 +195,6 @@ penguins |>
 # facet_wrap(.~sex+species)
 # facet_wrap(.~sex+species) 
 
-bbc_style
-
-geom_
+#
+library(nycflights23)
+flights |> print(n = Inf)

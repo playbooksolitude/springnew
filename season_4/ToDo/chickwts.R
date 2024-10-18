@@ -24,6 +24,17 @@ chickwts |>
   # meatmeal: 고기 부산물
   # casein: 카세인(우유 단백질)
 
+# plot 0 ----
+chickwts |> 
+  group_by(feed) |> 
+  reframe(avg = mean(weight)) -> t1
+
+chickwts |> 
+  ggplot(aes(x = feed, y = weight)) +
+  geom_point() +
+  geom_point(data = t1, aes(x = feed, y = avg), 
+             size = 5, color = 'tomato2', shape = 4, stroke = 2)
+
 # plot 1 ----
 chickwts |> head()
 chickwts |> str()
