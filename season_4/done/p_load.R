@@ -1,0 +1,14 @@
+pacman::p_load(
+  "tidyverse", 
+  "googlesheets4", 
+  "scales",
+  "gt", 
+  "showtext", 
+  "nord", 
+  "wesanderson",
+  "patchwork",
+  "ggrepel", 
+  "googlesheets4", 
+  "plotly"
+)
+showtext_auto()

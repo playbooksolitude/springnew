@@ -15,29 +15,15 @@ read_sheet("https://docs.google.com/spreadsheets/d/16ZgYbL6GeSn9vLEKz1rXu4afzRFG
 max <- c(5,5,5,5,5,5,5,5,5)
 min <- c(0,0,0,0,0,0,0,0,0)
 
-#read_table(pipe("pbpaste")) -> t
-# t |> write_csv("./season_4/backlog/DataAnalitics.csv")
-#read_csv("./season_4/backlog/DataAnalitics.csv") -> t
-
-
 (t |> 
   pivot_longer(cols = c(2:5),
     names_to = '구분', 
     values_to = 'value') |> 
-  pivot_wider(names_from = 스펙,
+    pivot_wider(names_from = '스펙',
     values_from = value) |> 
   select(-1) -> t2)
 
 (rbind(max, min, t2) -> t3)
-
-# t3 |> 
-#   radarchart()
-
-# 동시에 그리기 ----------------------------------
-# t3 |> 
-#   radarchart(pcol=colors_in, pfcol = colors_out,
-#     title = "ML Engineer",
-#     vlcex = 1.5) 
 
 # 컬러 지정 #1 수동
 c("#F76461", "#1B9E77", 
@@ -46,6 +32,7 @@ c("#F76461", "#1B9E77",
 c("#F764614c", "#1B9E774c", 
   "#E79C544c", "#8475744c") -> colors_out #테두리
 
+# 화면 그리기 ----------------------------------
 #Data Analytics
 t3 |> slice(1:3) |> 
   radarchart(pcol="#F76461", pfcol = "#F7646180",
@@ -60,13 +47,6 @@ t3 |> slice(1,2,5) |>
     vlcex = 1.5, 
     cex.main = 2.5)
 
-#Data Scientist
-t3 |> slice(1,2,4) |> 
-  radarchart(pcol="#1B9E77", pfcol = "#1B9E7780",
-    vlcex = 1.5,
-    title = "Data Scientist", 
-    cex.main = 2.5) 
-
 #ML engineer
 t3 |> slice(1,2,6) |> 
   radarchart(pcol="#847574", pfcol = "#84757480",
@@ -74,9 +54,14 @@ t3 |> slice(1,2,6) |>
     vlcex = 1.5, 
     cex.main = 2.5)
 
-# ----
+#Data Scientist
+t3 |> slice(1,2,4) |> 
+  radarchart(pcol="#1B9E77", pfcol = "#1B9E7780",
+    vlcex = 1.5,
+    title = "Data Scientist", 
+    cex.main = 2.5) 
 
-#화면 4분할
+#화면 4분할 ----
 #op <- par(mar=c(1, 2, 2, 1), mfrow=c(2, 2))
 op <- par(mfrow=c(2, 2))
 op

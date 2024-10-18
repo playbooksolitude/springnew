@@ -10,6 +10,7 @@ pacman::p_load(
   "showtext", 
   "nord", 
   "wesanderson",
+  "patchwork",
   "ggrepel", 
   "googlesheets4", 
   "plotly"

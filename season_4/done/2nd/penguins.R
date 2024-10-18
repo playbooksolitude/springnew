@@ -2,32 +2,115 @@
 
 #
 if(!require(palmerpenguins))install.packages("palmerpenguins")
+install.packages('palmerpenguins')
 library(palmerpenguins)
 library(tidyverse)
+library(showtext)
+showtext_auto()
+library(nord)
 
 # ----
 penguins
+
+tail(penguins)
 
 # palmerpenguins ----
 #https://allisonhorst.github.io/palmerpenguins/
 
 # 1 패키지::데이터 ----
 palmerpenguins::penguins
-penguins
+penguins |> head()
+penguins |> count(year)
 
 # 1-1
 str(penguins)
 penguins |> str()
+str(penguins)
+penguins |> str()
+drop_na()
+#
+penguins |> 
+  drop_na(species, sex, island) |> 
+  ggplot(mapping = aes(color = species, 
+    x = bill_length_mm, 
+    y = bill_depth_mm)) +
+  geom_point() +
+  geom_smooth(se = F, method = 'lm') +
+  ggtitle(label = 'palmerpenguins', 
+    subtitle = '24.10.06') +
+  facet_grid(island~sex)
 
 #
 penguins |> 
+  drop_na(sex, species) |> 
   ggplot(aes(x = bill_length_mm, 
+<<<<<<< HEAD:season_4/1_todo/2nd/penguins.R
+    y = bill_depth_mm, 
+    color = species)) +
+  geom_point() +
+  geom_smooth(se = F, method = 'lm') +
+  facet_grid(island~sex)
+=======
              y = bill_depth_mm)) +
-  geom_point() 
+  geom_point(size = 3) +
+  theme(axis.text = element_text(size = 16),
+        axis.title = element_text(size = 18)) +
+  labs(title = "x축: 부리 길이, y축: 부리 두께" )
 
+# 2----
+penguins |> 
+  drop_na(bill_length_mm, bill_depth_mm) |> 
+  ggplot(aes(bill_length_mm, bill_depth_mm)) +
+  geom_point(size = 3) +
+  theme(axis.text = element_text(size = 16),
+        axis.title = element_text(size = 18)) +
+  geom_smooth(method = "lm", se = F) +
+  labs(title = "x축: 부리 길이, y축: 부리 두께" , 
+       subtitle = "회귀선")
 
+# 3 species ----
+penguins |> 
+  drop_na(bill_length_mm, bill_depth_mm) |> 
+  ggplot(aes(x = bill_length_mm, 
+             y = bill_depth_mm,
+             color = species, 
+             shape = species)) +
+  geom_point(size = 3) +
+  labs(title = "x축: 부리 길이, y축: 부리 두께" , 
+       subtitle = "회귀선")
+
+penguins$species |> table()
+# Adelie Chinstrap    Gentoo 
+# 152        68       124 
+
+>>>>>>> ecd87c4cd4b2935737667f18a7c21ee7975ac2d5:season_4/done/2nd/penguins.R
+
+## 4 species ----
+penguins |> 
+  drop_na(bill_length_mm, bill_depth_mm) |> 
+  ggplot(aes(x = bill_length_mm, 
+             y = bill_depth_mm,
+             color = species, 
+             shape = species)) +
+  geom_point(size = 3) +
+  theme(axis.text = element_text(size = 16),
+        axis.title = element_text(size = 18)) +
+  geom_smooth(method = "lm", se = F) +
+  labs(title = "x축: 부리 길이, y축: 부리 두께" , 
+       subtitle = "회귀선")
 
 #
+penguins |> 
+  drop_na(bill_length_mm, bill_depth_mm) |> 
+  ggplot(aes(x = flipper_length_mm, fill = species)) +
+  geom_histogram(alpha = .7, position = 'identity') +
+  #scale_fill_nord(palette = 'aurora') +
+  theme_minimal()
+  
+colorspace::hcl_palettes(plot = T)
+
+
+# check ----
 penguins #344
 penguins |> 
   drop_na(bill_length_mm, bill_depth_mm)
@@ -38,32 +121,8 @@ penguins |>
 # penguins |> 
 #   mutate(number = row_number(), .before = 1) -> penguins_2edit
 
-# 2----
-penguins |> 
-  drop_na(bill_length_mm, bill_depth_mm) |> 
-  ggplot(aes(bill_length_mm, bill_depth_mm)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = F) # -- 회귀선 (추세선))
 
-# 3 species ----
-penguins |> 
-  drop_na(bill_length_mm, bill_depth_mm) |> 
-  ggplot(aes(x = bill_length_mm, 
-             y = bill_depth_mm,
-             color = species)) +
-  geom_point()
-
-
-## 3-1 species ----
-penguins |> 
-  drop_na(bill_length_mm, bill_depth_mm) |> 
-  ggplot(aes(x = bill_length_mm, 
-             y = bill_depth_mm,
-             color = species)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = F)
-
-## 3-2 sex ----
+##  sex ----
 penguins |> 
   drop_na(bill_length_mm, bill_depth_mm) |> 
   ggplot(aes(x = bill_length_mm, 
@@ -162,6 +221,6 @@ penguins |>
 # facet_wrap(.~sex+species)
 # facet_wrap(.~sex+species) 
 
-bbc_style
-
-geom_
+#
+library(nycflights23)
+flights |> print(n = Inf)
