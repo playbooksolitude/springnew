@@ -17,7 +17,6 @@ chickwts |>
   ggplot(aes(x = feed, y = n)) +
   geom_bar(stat = 'identity')
 
-
 # 설명 ----
 # weight: 병아리의 체중(그램 단위).
 # feed: 병아리가 섭취한 사료의 종류
@@ -65,7 +64,7 @@ chickwts |>
    group_by(feed) |> 
    reframe(mean_feed = mean(weight), 
            n = n()) |> 
-   ggplot(aes(x = feed |> fct_reorder(mean_feed), 
+   ggplot(aes(x = feed, 
               y = mean_feed)) +
    geom_bar(stat = 'identity') +
    labs(title = '', subtitle = '평균', x = 'feed') +
@@ -76,7 +75,8 @@ chickwts |>
   group_by(feed) |> 
   reframe(mean_feed = mean(weight), 
     n = n()) |> 
-  ggplot(aes(x = feed |> fct_reorder(mean_feed), 
+  ggplot(aes(x = feed,
+  #ggplot(aes(x = feed |> fct_reorder(mean_feed), 
     y = mean_feed)) +
   geom_bar(stat = 'identity') +
   labs(title = '', subtitle = '평균', x = 'feed') +
@@ -86,12 +86,18 @@ chickwts |>
 (chickwts |> 
    ggplot(aes(x = feed, y = weight)) +
    geom_boxplot() +
+   geom_point(data = t1, aes(x = feed, y = avg), 
+              size = 5, color = 'tomato2', shape = 4, stroke = 2) +
    labs(title = "", subtitle = 'IQR') +
    geom_point(position = position_jitter(.1)) -> plot_1boxplot)
 
 
 # patchwork all ----
 plot_1boxplot  / plot_2barplot
+
+# order
+
+
 
 # test ----
 mpg |> 
@@ -109,5 +115,21 @@ mpg |>
 #   filter(class == "subcompact") |> 
 #   with(cty) |> sort() |> IQR()
 
-#
+# t.test ----
+chickwts |> 
+  filter(feed %in% c("casein", "sunflower")) -> t3_ttest
+
+# 
+t.test(weight ~ feed, data = t3_ttest)
+
+# 
+chickwts |> 
+  filter(feed %in% c("meatmeal", "sunflower")) -> t4_ttest
+
+t.test(weight ~ feed, data = t4_ttest)
+
+chickwts |> 
+  filter(feed %in% c("horsebean", "sunflower")) -> t5_ttest
+
+t.test(weight ~ feed, data = t5_ttest)
 
