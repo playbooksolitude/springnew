@@ -10,6 +10,8 @@ source("~/Documents/springnew/season_4/done/p_load.R", echo = TRUE)
 
 #
 chickwts |> head()
+chickwts
+
 chickwts |> 
   count(feed) |> 
   ggplot(aes(x = feed, y = n)) +
@@ -37,6 +39,13 @@ chickwts |>
   geom_point(data = t1, aes(x = feed, y = avg), 
              size = 5, color = 'tomato2', shape = 4, stroke = 2)
 
+chickwts |> 
+  ggplot(aes(x = feed, y = weight)) +
+  geom_boxplot() +
+  geom_point(data = t1, aes(x = feed, y = avg), 
+             size = 5, color = 'tomato2', shape = 4, stroke = 2) +
+  geom_point()
+
 # plot 1 ----
 chickwts |> head()
 chickwts |> str()
@@ -63,3 +72,14 @@ chickwts |> count(feed)
 plot_1boxplot  / plot_2barplot
 
 #
+mpg |> 
+  group_by(class) |> 
+  reframe(avg = mean(cty)) -> t2
+
+mpg |> 
+  ggplot(aes(x = class, y = cty)) +
+  geom_boxplot() +
+  geom_point(position = position_jitter(.1), alpha = .5) +
+  geom_point(data = t2, aes(x = class, y = avg), 
+             size = 5, color = 'tomato2', shape = 4, stroke = 2)
+  

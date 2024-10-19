@@ -79,3 +79,11 @@ mpg |>
 ggpairs(Guns, c("violent", "murder", "afam",
                 "cauc", "male", "law"))
 
+ggpairs(Guns, c("violent", "murder", "afam",
+                "cauc", "income", "law"))
+
+Guns |> head()
+#
+Guns |> str()
+ggpairs(Guns, c("violent", "murder", "robbery",
+                "prisoners", "income", "population"))
