@@ -28,17 +28,24 @@ chickwts |>
   # meatmeal: 고기 부산물
   # casein: 카세인(우유 단백질)
 
-# plot 0 ----
+# plot point ---- 
 chickwts |> 
-  group_by(feed) |> 
-  reframe(avg = mean(weight)) -> t1
+  ggplot(aes(x = feed, y = weight)) +
+  geom_point()
 
+## t1 ----
+(chickwts |> 
+  group_by(feed) |> 
+  reframe(avg = mean(weight)) -> t1)
+
+# plot mean ----
 chickwts |> 
   ggplot(aes(x = feed, y = weight)) +
   geom_point() +
   geom_point(data = t1, aes(x = feed, y = avg), 
              size = 5, color = 'tomato2', shape = 4, stroke = 2)
 
+# plot boxplot ----
 chickwts |> 
   ggplot(aes(x = feed, y = weight)) +
   geom_boxplot() +
@@ -46,18 +53,25 @@ chickwts |>
              size = 5, color = 'tomato2', shape = 4, stroke = 2) +
   geom_point()
 
-# plot 1 ----
-chickwts |> head()
-chickwts |> str()
-(chickwts |> 
-  ggplot(aes(x = feed, y = weight)) +
-  geom_boxplot() +
-    labs(title = "", subtitle = 'IQR') +
-  geom_point(position = position_jitter(.1)) -> plot_1boxplot)
 
-chickwts |> count(feed)
+## group_by ----
+chickwts |> 
+  group_by(feed) |> 
+  reframe(mean_feed = mean(weight), 
+          n = n())
 
-# plot 2 ----
+# geom_bar ----
+chickwts |> 
+   group_by(feed) |> 
+   reframe(mean_feed = mean(weight), 
+           n = n()) |> 
+   ggplot(aes(x = feed |> fct_reorder(mean_feed), 
+              y = mean_feed)) +
+   geom_bar(stat = 'identity') +
+   labs(title = '', subtitle = '평균', x = 'feed') +
+   geom_label(aes(label = round(mean_feed,1)))
+
+# patchwork1 ----
 (chickwts |> 
   group_by(feed) |> 
   reframe(mean_feed = mean(weight), 
@@ -68,18 +82,32 @@ chickwts |> count(feed)
   labs(title = '', subtitle = '평균', x = 'feed') +
   geom_label(aes(label = round(mean_feed,1))) -> plot_2barplot)
 
-# patchwork ----
+# patchwork2 ----
+(chickwts |> 
+   ggplot(aes(x = feed, y = weight)) +
+   geom_boxplot() +
+   labs(title = "", subtitle = 'IQR') +
+   geom_point(position = position_jitter(.1)) -> plot_1boxplot)
+
+
+# patchwork all ----
 plot_1boxplot  / plot_2barplot
 
-#
+# test ----
 mpg |> 
   group_by(class) |> 
   reframe(avg = mean(cty)) -> t2
 
 mpg |> 
   ggplot(aes(x = class, y = cty)) +
-  geom_boxplot() +
+  geom_boxplot(outliers = F) +
   geom_point(position = position_jitter(.1), alpha = .5) +
   geom_point(data = t2, aes(x = class, y = avg), 
              size = 5, color = 'tomato2', shape = 4, stroke = 2)
   
+# mpg |> 
+#   filter(class == "subcompact") |> 
+#   with(cty) |> sort() |> IQR()
+
+#
+

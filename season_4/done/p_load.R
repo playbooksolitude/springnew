@@ -12,7 +12,7 @@ pacman::p_load(
   "patchwork",
   "ggrepel", 
   "GGally",
-  "devtools",
+  "bbplot",
   "googlesheets4", 
   "plotly"
 )
