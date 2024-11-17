@@ -1,17 +1,33 @@
 #24-1006
 
 #패키지 불러오기
-source("~/Documents/springnew/season_4/done/p_load.R", echo = TRUE)
+source("~/Documents/springnew/season_4/done/p_load.R", 
+  echo = TRUE)
 
-# library(tidyverse)
-# library(patchwork)
-# library(showtext)
-# showtext_auto()
+library(tidyverse)
+#install.packages('patchwork')
+library(patchwork)
+
+library(showtext)
+showtext_auto()
 
 #
 chickwts |> head()
 chickwts
+chickwts |> str()
+chickwts |> count(feed)
+?chickwts
 
+# casein : 카세인 (우유 단백질)
+# 막대그래프 geom_bar() ----
+chickwts |> 
+  count(feed) |> 
+  ggplot(aes(x = feed, y = n)) +
+  geom_bar(stat = 'identity') +
+  geom_label(aes(label = n))
+  
+chickwts |> view()
+#
 chickwts |> 
   count(feed) |> 
   ggplot(aes(x = feed, y = n)) +
@@ -32,6 +48,12 @@ chickwts |>
   ggplot(aes(x = feed, y = weight)) +
   geom_point()
 
+#
+chickwts |> 
+  group_by(feed) |> 
+  reframe(avg = mean(weight)) -> t1
+t1
+
 ## t1 ----
 (chickwts |> 
   group_by(feed) |> 
@@ -39,17 +61,29 @@ chickwts |>
 
 # plot mean ----
 chickwts |> 
+  ggplot(aes(x = feed,y = weight)) +
+  geom_boxplot(outlier.color = 'red') +
+  geom_point() +
+  geom_point(data = t1, aes(x = feed, y = avg), 
+    color = 'tomato', size = 5, shape = 4, 
+    stroke = 2)
+
+
+
+chickwts |> 
   ggplot(aes(x = feed, y = weight)) +
   geom_point() +
   geom_point(data = t1, aes(x = feed, y = avg), 
-             size = 5, color = 'tomato2', shape = 4, stroke = 2)
+             size = 5, color = 'tomato2', shape = 4, 
+    stroke = 2)
 
 # plot boxplot ----
 chickwts |> 
   ggplot(aes(x = feed, y = weight)) +
   geom_boxplot() +
   geom_point(data = t1, aes(x = feed, y = avg), 
-             size = 5, color = 'tomato2', shape = 4, stroke = 2) +
+             size = 5, color = 'tomato2', 
+    shape = 4, stroke = 2) +
   geom_point()
 
 
@@ -93,7 +127,7 @@ chickwts |>
 
 
 # patchwork all ----
-plot_1boxplot  / plot_2barplot
+plot_1boxplot / plot_2barplot
 
 # order
 
@@ -109,7 +143,8 @@ mpg |>
   geom_boxplot(outliers = F) +
   geom_point(position = position_jitter(.1), alpha = .5) +
   geom_point(data = t2, aes(x = class, y = avg), 
-             size = 5, color = 'tomato2', shape = 4, stroke = 2)
+             size = 5, color = 'tomato2', shape = 4, 
+    stroke = 2)
   
 # mpg |> 
 #   filter(class == "subcompact") |> 
