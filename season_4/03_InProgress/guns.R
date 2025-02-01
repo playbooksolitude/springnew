@@ -1,8 +1,8 @@
 #24-0925 
 
 #
-source("~/Documents/springnew/season_4/Done/p_load.R", echo = T)
-
+source("~/Documents/springnew/season_4/Done/p_load.R", 
+  echo = T)
 
 # library(tidyverse)
 library(AER)
