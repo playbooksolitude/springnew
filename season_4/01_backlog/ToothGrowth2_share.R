@@ -8,11 +8,6 @@
 #
 library(tidyverse)
 library(ggmosaic)
-<<<<<<< HEAD
-=======
-
->>>>>>> 51553fa57a698b5b89da94cb8eef6829af3e991d
-#
 data()
 
 # 용어 통일
