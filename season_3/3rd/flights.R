@@ -63,14 +63,14 @@ airport_2407_sheet |>
 #install.packages("nycflights")
 
 # load
-library(nycflights)
+library(nycflights13)
 
 #1 데이터 확인 ---- 
-nycflights::airlines
-nycflights::airports
-nycflights::flights
-nycflights::planes
-nycflights::weather
+nycflights13::airlines
+nycflights13::airports
+nycflights13::flights
+nycflights13::planes
+nycflights13::weather
 
 #2 데이터 복제
 flights

@@ -5,9 +5,9 @@
 # 면분할
 # 신뢰구간과 두 평균의 비교 t.test()
 
+
 #
 library(tidyverse)
-library(ggmosaic)
 data()
 
 # 용어 통일
@@ -16,6 +16,10 @@ data()
 
 #1 ToothGrowth ----
 ToothGrowth
+ToothGrowth
+?ToothGrowth
+
+
 ToothGrowth |> str()
 ToothGrowth |> glimpse()
 ToothGrowth |> head(10)
@@ -31,7 +35,8 @@ ToothGrowth |>
 ToothGrowth |> 
   count(dose)
 
-ToothGrowth |> summary()
+ToothGrowth |> 
+  summary()
 
 #4 산점도 ----
 ToothGrowth |>
@@ -78,6 +83,7 @@ ToothGrowth |>
   facet_wrap(.~supp)
 
 # test ----
+?t.test
 t.test(len ~ supp, data = ToothGrowth)
 t_test_result <- t.test(len ~ supp, data = ToothGrowth)
 t_test_result
