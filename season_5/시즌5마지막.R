@@ -10,15 +10,28 @@ showtext_auto()
 
 
 #1 read ----
-(read_csv("./season_3/3rd/airport_2402_arr.csv") -> ap_1arr_csv)
-(read_excel("./season_3/3rd/airpot_24_02_dep.xlsx") -> ap_1dep_xls)
-(read_excel("./season_3/3rd/airpot_24_02_dep.xlsx", col_types = c('text', 'text', 'text',
-                                                                  'text', 'text', 'text', 
-                                                                  'text', 'text', 
-                                                                  'date', 'date', 'date', 
-                                                                  'text', 'text')) -> ap_1dep_xls)
+(read_csv("./season_5/airport_2402_arr.csv") -> ap_1arr_csv)
+(read_csv("./season_5/airpot_24_02_dep2.csv") -> ap_1dep_csv)
+
+
+# str ---
+ap_1arr_csv |> str()
+ap_1dep_csv |> str()
 
 #
+ap_1arr_csv
+ap_1dep_csv
+
+
+#
+#(read_excel("./season_3/3rd/airpot_24_02_dep.xlsx") -> ap_1dep_xls)
+# ap_1dep_xls |> str()
+# ap_1dep_xls |> 
+#   write_csv("./season_5/airpot_24_02_dep2.csv")
+# read_csv("./season_5/airpot_24_02_dep2.csv")
+
+#
+ap_1arr_csv |> str()
 ap_1arr_csv
 ap_1dep_xls |> glimpse()
 
@@ -74,22 +87,40 @@ ap_4arr |> slice(1,n())
 ap_4arr |> glimpse()
 
 # 계획시간 변형 ----
-ap_4arr |> 
-  select(날짜, 항공사, 편명, 계획시간, 실제시간) |> 
+(ap_4arr |> 
+  select(날짜, 항공사, 편명, 출발공항명, 도착공항명, 계획시간, 실제시간, 구분) |> 
   mutate(실제시간edit = paste0(실제시간, ":00")) |> 
   separate(col = 실제시간edit, into = c('시', '분', '초'), sep = ":") |> 
   mutate(시 = as.integer(시), 
          #분2 = as.integer(분), .keep = 'used') |> #sample_n(50) |> print(n =50)
           분 = as.integer(분), .keep = 'all', 
-         시간 = 시* 60 + 분, 
-         as_hms(시간)) 
+         실제시간 = 시* 60 + 분) -> ap_5arr)
+          
+ap_5arr$실제시간 <- as.POSIXct(ap_5arr$실제시간 * 60, origin = '2024-02-01', tz = 'UTC')
+
+#library(hms)
+# (ap_5arr |>
+#   mutate(실제시간 = as_hms(실제시간 - trunc(실제시간, "days"))) -> ap_6arr)
+
+(ap_5arr |> 
+    mutate(실제시간 = hms(as.numeric(실제시간 - trunc(실제시간, "days")))) -> ap_6arr)
 
 
+(ap_6arr |> 
+  select(-c(초, 시, 분)) |> 
+  mutate(차이 = 실제시간 - 계획시간, 
+         비고 = ifelse(차이 > 0, '지연출발', '조기출발')) -> ap_7tidy)
+  
+ap_7tidy
 
-#
-ap_tidy1 |> slice(1,n())
-ap_tidy1 |> glimpse()
-ap_tidy1 |> str()
+
+ap_7tidy |> 
+  count(비고, 구분) |> 
+  drop_na() |> 
+  ggplot(aes(x = 비고, y = 구분, fill = n)) +
+  geom_tile(color = 'snow', size = 2) +
+  geom_text(aes(label = n)) +
+  colorspace::scale_fill_binned_sequential('Peach')
 
 
 
