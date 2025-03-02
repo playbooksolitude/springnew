@@ -5,6 +5,7 @@ library(tidyverse)
 
 #
 USArrests |> head()
+USArrests
 
 ggplot(data = USArrests, 
        aes(x = Murder, 
