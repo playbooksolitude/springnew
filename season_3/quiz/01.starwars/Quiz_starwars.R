@@ -63,7 +63,7 @@ dplyr::starwars
 
 
 
-#14. group_by() |> summarise() 활용해 gender 구성표를 만들고 B라는 변수에 저장하시오 ----
+#14. group_by() |> reframe() 활용해 gender 구성표를 만들고 B라는 변수에 저장하시오 ----
 
 
 #geom_bar(stat = "identity)
@@ -74,4 +74,11 @@ dplyr::starwars
 
 
 #17 위의 그래프에서  NA를 제거하시오 ----
+
+
+
+
+
+
+
 
