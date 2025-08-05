@@ -120,7 +120,7 @@ thx4_csv |> slice(1,2,6) |>
 
 # 동시에 그리기 ----------------------------------
 thx4_csv |> 
-  radarchart(pcol="#847574", pfcol = "#84757480",
+  radarchart(pcol=color_in, pfcol = colors_out,
     title = "ML Engineer",
     vlcex = 1.5) 
 
@@ -137,7 +137,7 @@ thx4_csv |>
   radarchart(pcol=colors_in,    #색 채우기
     pfcol = colors_out,         # 테두리 
     title = "Data Job Skill",   #제목
-    vlcex = 1.2)                #글자 크기
+    vlcex = 1.2)                #글자 크기 
 
 
 # 컬러에 적용할 팔레트 보기

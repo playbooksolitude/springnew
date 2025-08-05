@@ -52,7 +52,7 @@ vehicles |>
 ```
 
 ### 2. group_by(), reframe()
-> 제조사별 평균 고속도 연비를 계산하시오 <br>
+> 제조사별 평균 고속도로 연비를 계산하시오 <br>
 > - group_by(), reframe(), mean()
 
 ```{r, echo=FALSE}
@@ -414,7 +414,7 @@ vehicles |>
 
 vehicles |> 
   ggplot(aes(x = hwy)) +
-  geom_histogram(binwidth = 3)
+  geom_histogram(binwidth = 2)
 
 ```
 <br>
